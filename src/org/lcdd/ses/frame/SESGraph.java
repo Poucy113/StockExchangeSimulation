@@ -14,7 +14,7 @@ public class SESGraph extends JComponent {
 		this.server = server;
 		this.frame = frame;
 		
-		// http://www.lirmm.fr/~leclere/enseignements/TER/2008/Rapport/18.pdf
+		// http://www.lirmm.fr/~leclere/enseignements/TER/2008/Rapport/18.pdf // 3.3
 		
 		//Rectangle rect = (Rectangle) frame.getBounds().clone();
 		//rect.setRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
