@@ -41,6 +41,15 @@ public class GraphicLine {
 		private Color color;
 		private GraphicLineType(Color color) {this.color = color;}
 		public Color getColor() {return color;}
+		public static GraphicLineType getFor(double d) {
+			if(Double.valueOf(d) < 0)
+				return NEGATIV;
+			if(Double.valueOf(d) == 0)
+				return NEUTRAL;
+			if(Double.valueOf(d) > 0)
+				return POSITIV;
+			return NEUTRAL;
+		}
 	}
 
 }
