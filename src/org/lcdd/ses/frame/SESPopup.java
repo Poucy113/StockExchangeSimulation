@@ -42,7 +42,7 @@ public class SESPopup extends JFrame implements MouseListener {
 		super.setVisible(true);
 		super.setEnabled(true);
 		super.setAlwaysOnTop(true);
-		super.setResizable(false);
+		//super.setResizable(false);
 		
 		JDesktopPane desk = new JDesktopPane();
 		desk.setBounds(0, 0, super.getWidth(), super.getHeight());
@@ -65,17 +65,16 @@ public class SESPopup extends JFrame implements MouseListener {
 			input = new JTextField();
 		else if(type == PopupType.INPUT_NUMBER)
 			input = new JSpinner();
-		if(type != PopupType.BOOLEAN)
-			input.setBounds(0, (super.getHeight() / 3)*1, super.getWidth(), (super.getHeight() / 3));
 		if(type != PopupType.BOOLEAN) {
+			input.setBounds(0, (super.getHeight() / 2)*1, super.getWidth(), (super.getHeight() / 2));
 			input.setVisible(true);
 			super.getContentPane().add(input);
 		}
 		
 		if(type == PopupType.BOOLEAN) {
 			JButton button1 = new JButton("Oui"), button2 = new JButton("Non");
-			button1.setBounds((super.getWidth() / 2)*0, (super.getHeight() / 3)*2, (super.getWidth() / 2)*1, (super.getHeight() / 2));
-			button2.setBounds((super.getWidth() / 2)*1, (super.getHeight() / 3)*2, (super.getWidth() / 2)*1, (super.getHeight() / 2));
+			button1.setBounds((super.getWidth() / 2)*0, (super.getHeight() / 2)*1, (super.getWidth() / 2)*1, (super.getHeight() / 2));
+			button2.setBounds((super.getWidth() / 2)*1, (super.getHeight() / 2)*1, (super.getWidth() / 2)*1, (super.getHeight() / 2));
 			buttons.add(button1);
 			buttons.add(button2);
 		}else {

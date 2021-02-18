@@ -20,7 +20,7 @@ public class SESFrame extends JFrame implements WindowListener {
 	private List<SESPopup> popups = new ArrayList<>();
 	
 	public SESFrame() {
-		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nul d'utilisateur:", PopupType.INPUT_STRING);
+		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.BOOLEAN);
 		popups.add(login);
 		
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
