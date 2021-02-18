@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.json.JSONObject;
+import org.lcdd.ses.SESMain;
 import org.lcdd.ses.frame.SESPopup;
 import org.lcdd.ses.frame.SESPopup.PopupType;
 
@@ -45,7 +46,7 @@ public class UserManager {
                 save.setWritable(true);
                 New = true;
             } catch (IOException e) {
-            	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la création du fichier de sauvegarde: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+            	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la création du fichier de sauvegarde: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
             }
         else
         	New = false;
@@ -60,24 +61,24 @@ public class UserManager {
             
             Files.write(Paths.get(path.replace("<user>", username)), userJson.toString().getBytes());
         } catch (IOException e) {
-        	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la sauvegarde des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+        	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la sauvegarde des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
         }
     }
 
     public void loadUser() {
         try {
-        	JSONObject obj = new JSONObject(Files.readString(Paths.get(path.replace("<user>", username))));
+        	JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get(path.replace("<user>", username)))));
         	this.money = obj.getDouble("money");
         	this.actions = obj.getInt("actions");
         } catch (IOException e) {
-            new SESPopup(null, "SES - Alert", "Une erreur est survenue lors du chargement des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+            new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors du chargement des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
         }
     }
     
     public void buy(){
         //if(money >= Math.round((100/GraphUpdater.getPrice())*8))    
     		money = money - Math.round((100/GraphUpdater.getPrice())*8);
-            new SESPopup(null, "SES - Info", "Vous avez acheté une action pour " + Math.round((100/GraphUpdater.getPrice())*8), PopupType.ALERT);
+            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez acheté une action pour " + Math.round((100/GraphUpdater.getPrice())*8), PopupType.ALERT);
             actions++;
         /*}else{
             SESPopup popup = new SESPopup(null,"SES - Info", "Vous n'avez pas assez d'argent", PopupType.BOOLEAN);
@@ -86,10 +87,10 @@ public class UserManager {
     public void sell(){
         if(this.actions >= 1){
             money = money + GraphUpdater.getPrice();
-            new SESPopup(null, "SES - Info", "Vous avez vendu une action pour " + Math.round((100/GraphUpdater.getPrice())*8), PopupType.ALERT);
+            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez vendu une action pour " + Math.round((100/GraphUpdater.getPrice())*8), PopupType.ALERT);
             actions--;
         }else{
-            new SESPopup(null, "SES - Info", "Vous n'avez pas d'actions", PopupType.BOOLEAN);
+            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous n'avez pas d'actions", PopupType.BOOLEAN);
         }
     }
     
