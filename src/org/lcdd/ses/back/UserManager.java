@@ -55,6 +55,22 @@ public class UserManager {
         this.username = username;
     }
 
+    public void addAction(int number){
+        this.actions = this.getActions() + number;
+    }
+
+    public void removeAction(int number){
+        this.actions = this.getActions() - number;
+    }
+
+    public void addMoney(int number){
+        this.money = this.getMoney() + number;
+    }
+
+    public void removeMoney(int number){
+        this.money = this.getMoney() - number;
+    }
+
     public void saveUser() {
         JSONObject userJson = new JSONObject();
         userJson.put("username", this.getUsername());
