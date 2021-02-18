@@ -21,7 +21,7 @@ public class SESPopup extends JFrame implements MouseListener {
 	
 	private boolean cancelled;
 	
-	private JFrame supe;
+	private SESFrame supe;
 	private String name;
 	private String msg;
 	private PopupType type;
@@ -33,20 +33,18 @@ public class SESPopup extends JFrame implements MouseListener {
 	private Object answer = null;
 	private Consumer<Object> onComplete;
 	
-	public SESPopup(JFrame supe, String title, String msg, PopupType type) {
+	public SESPopup(SESFrame supe, String title, String msg, PopupType type) {
 		super(title);
 		this.supe = supe;
 		this.name = title;
 		this.msg = msg;
 		this.type = type;
 		
-		if(supe != null)
-			supe.setEnabled(false);
+		supe.getActivePopups().add(this);
+		
+		supe.setEnabled(false);
 		super.setType(Type.POPUP);
-		if(supe != null)
-			super.setBounds(supe.getX(), supe.getY(), 325, 200);
-		else
-			super.setBounds(100, 100, 325, 200);
+		super.setBounds(supe.getX(), supe.getY(), 325, 200);
 		super.setEnabled(true);
 		super.setAlwaysOnTop(true);
 		super.setResizable(false);
@@ -104,7 +102,7 @@ public class SESPopup extends JFrame implements MouseListener {
 	}
 	
 	public SESPopup onComplete(Consumer<Object> r) {this.onComplete = r;return this;}
-	private void complete() {onComplete.accept(answer);}
+	private void complete() {onComplete.accept(answer);supe.getActivePopups().remove(this);}
 	
 	public void cancel() {cancelled = true;super.dispose();}
 	

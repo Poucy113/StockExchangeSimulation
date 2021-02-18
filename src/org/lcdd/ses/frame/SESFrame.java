@@ -81,7 +81,6 @@ public class SESFrame extends JFrame implements WindowListener {
 	public void windowClosed(WindowEvent e) {
 		System.exit(e.getID());
 	}
-
 	@Override
 	public void windowIconified(WindowEvent e) {}
 	@Override
