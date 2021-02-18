@@ -29,7 +29,7 @@ public class GraphUpdater{
                     	
                         Thread.sleep(r.nextInt(1250));
                     } catch (InterruptedException e) {
-                    	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la generation aléatoire: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+                    	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la generation aléatoire: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
                     }
                 }
             }

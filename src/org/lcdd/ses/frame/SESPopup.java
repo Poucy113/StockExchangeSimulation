@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -31,7 +30,7 @@ public class SESPopup extends JFrame implements MouseListener {
 	private List<JButton> buttons = new ArrayList<>();
 	
 	private Object answer = null;
-	private Consumer<Object> onComplete;
+	private PopupActionConsumer<Object> onComplete;
 	
 	public SESPopup(SESFrame supe, String title, String msg, PopupType type) {
 		super(title);
@@ -101,8 +100,8 @@ public class SESPopup extends JFrame implements MouseListener {
 		}
 	}
 	
-	public SESPopup onComplete(Consumer<Object> r) {this.onComplete = r;return this;}
-	private void complete() {onComplete.accept(answer);supe.getActivePopups().remove(this);}
+	public SESPopup onComplete(PopupActionConsumer<Object> r) {this.onComplete = r;return this;}
+	private boolean complete() {return onComplete.accept(answer);}
 	
 	public void cancel() {cancelled = true;super.dispose();}
 	
@@ -114,7 +113,7 @@ public class SESPopup extends JFrame implements MouseListener {
 	public JLabel getLabel() {return label;}
 	public JComponent getInput() {return input;}
 	public List<JButton> getButtons() {return buttons;}
-	public Consumer<Object> getOnComplete() {return onComplete;}
+	public PopupActionConsumer<Object> getOnComplete() {return onComplete;}
 	public boolean isCancelled() {return cancelled;}
 	
 	@Override
@@ -133,8 +132,8 @@ public class SESPopup extends JFrame implements MouseListener {
 					answer = true;
 			}
 		}
-		if(answer != null) {
-			complete();
+		if(complete()) {
+			supe.getActivePopups().remove(this);
 			super.dispose();
 		}
 	}
@@ -153,6 +152,11 @@ public class SESPopup extends JFrame implements MouseListener {
 		INPUT_NUMBER(),
 		BOOLEAN(),
 		ALERT();
+	}
+	
+	@FunctionalInterface
+	public interface PopupActionConsumer<T> {
+		boolean accept(Object answer);
 	}
 
 }

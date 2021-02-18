@@ -46,7 +46,7 @@ public class UserManager {
                 save.setWritable(true);
                 New = true;
             } catch (IOException e) {
-            	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la création du fichier de sauvegarde: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+            	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la création du fichier de sauvegarde: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
             }
         else
         	New = false;
@@ -61,7 +61,7 @@ public class UserManager {
             
             Files.write(Paths.get(path.replace("<user>", username)), userJson.toString().getBytes());
         } catch (IOException e) {
-        	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la sauvegarde des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+        	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la sauvegarde des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
         }
     }
 
@@ -71,7 +71,7 @@ public class UserManager {
         	this.money = obj.getDouble("money");
         	this.actions = obj.getInt("actions");
         } catch (IOException e) {
-            new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors du chargement des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+            new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors du chargement des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
         }
     }
     
