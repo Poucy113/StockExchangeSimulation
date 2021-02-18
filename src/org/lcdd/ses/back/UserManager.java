@@ -1,6 +1,8 @@
 package org.lcdd.ses.back;
 
 import org.json.JSONObject;
+import org.lcdd.ses.SESMain;
+import org.lcdd.ses.frame.SESPopup;
 
 import java.io.*;
 
@@ -69,6 +71,17 @@ public class UserManager {
 
     public void removeMoney(int number){
         this.money = this.getMoney() - number;
+    }
+
+    public void buy(){
+        if(this.money >= GraphUpdater.getBuyPrice()) {
+            this.money = this.money - GraphUpdater.getBuyPrice();
+            this.actions++;
+            SESPopup popup = new SESPopup(null,"SES - Info", "Vous avez acheté une action pour " + GraphUpdater.getBuyPrice(), SESPopup.PopupType.BOOLEAN);
+        }else{
+            SESPopup popup = new SESPopup(null,"SES - Info", "Vous n'avez pas assez d'argent", SESPopup.PopupType.BOOLEAN);
+        }
+
     }
 
     public void saveUser() {
