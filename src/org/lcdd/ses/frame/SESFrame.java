@@ -67,7 +67,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		super.setMenuBar(menu);
 		desk.add(graph);
 		
-		userPanel.setBackground(Color.BLUE);
+		userPanel.setBackground(Color.LIGHT_GRAY);
 		userPanel.setVisible(true);
 		userPanelUserName.setVisible(true);
 		userPanelUserName.setForeground(Color.WHITE);
