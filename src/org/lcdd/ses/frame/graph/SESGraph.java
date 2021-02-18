@@ -64,12 +64,13 @@ public class SESGraph extends JDesktopPane implements ComponentListener {
     	}
     }
     
-    public void addLine(GraphicLine line) {
+    public SESGraph addLine(GraphicLine line) {
     	if(lines.size() >= 1)
     		line.setN1(new GraphicNode(lines.get(lines.size()-1).getN2().getY(), true));
     	lines.add(line);
     	if(lines.size() > 25)
     		lines.remove(0);
+    	return this;
     }
     
     private void resizeFrame() {

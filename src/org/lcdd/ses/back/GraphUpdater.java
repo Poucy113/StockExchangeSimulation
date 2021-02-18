@@ -1,41 +1,58 @@
 package org.lcdd.ses.back;
 
+import java.util.Random;
+
+import org.lcdd.ses.SESMain;
+import org.lcdd.ses.frame.SESPopup;
+import org.lcdd.ses.frame.SESPopup.PopupType;
+import org.lcdd.ses.frame.graph.GraphicLine;
+import org.lcdd.ses.frame.graph.GraphicNode;
+
 public class GraphUpdater{
 
-    private static int buyPrice = 100;
-    private static int sellPrice = 90;
-    
+    private static double price = 100;
+	
     private static Thread th;
     
     public GraphUpdater() {
 		th = new Thread(new Runnable() {
+			private Random r = new Random();
 	        @Override
 	        public void run() {
                 while (true) {
                     try {
-                        int max = buyPrice + 10;
-                        int min = buyPrice - 10;
-                        int newPrice = (int) ((max - min) * Math.random()) + min;
-                        buyPrice = newPrice;
-                        System.out.println(buyPrice);
-                        sellPrice = Math.round((100/buyPrice)*8);
-                        System.out.println(sellPrice);
-                        Thread.sleep(1000);
+                    	double oldPrice = price;
+                    	price = rand();
+                    	double newPrice = price;
+                    	
+                    	SESMain.getFrame().getGraph().addLine(new GraphicLine(new GraphicNode((int) oldPrice), new GraphicNode((int) newPrice))).update();
+                    	
+                        Thread.sleep(r.nextInt(1250));
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la generation aléatoire: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
                     }
                 }
             }
+	        private double rand() {
+	        	double d = price+(r.nextInt((int) Math.round(20 +1))-10) - (Math.random()*0.5);
+        		if(d < -350) {
+        			d += (d / 35);
+        			rand();
+        		}else if(d > 350) {
+        			d -= (d / 35);
+        			rand();
+        		}else
+        			return d;
+				return d;
+	        }
 	    });
 		th.setName("GraphUpdater");
 		th.start();
 	}
 
-    public static int getBuyPrice() {
-        return buyPrice;
-    }
-    public static int getSellPrice() {return sellPrice;}
-
+    //public static int getBuyPrice() {return buyPrice;}
+    //public static int getSellPrice() {return sellPrice;}
+    public static double getPrice() {return price;}
     public static Thread getUpdaterThread() {return th;}
 
 }
