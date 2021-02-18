@@ -1,14 +1,10 @@
 package org.lcdd.ses.back;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.lcdd.ses.frame.SESPopup;
 import org.lcdd.ses.frame.SESPopup.PopupType;
