@@ -11,22 +11,24 @@ public class GraphUpdater{
 		th = new Thread(new Runnable() {
 	        @Override
 	        public void run() {
-	            try {
-	            	int max = buyPrice + 10;
-	                int min = buyPrice - 10;
-	                int newPrice = (int) ((max-min)*Math.random()) + min;
-	                buyPrice = newPrice;
-	                System.out.println(buyPrice);
-	                int maxSell = sellPrice + 10;
-	                int minSell = sellPrice - 10;
-	                int newPriceSell = (int) ((maxSell-minSell)*Math.random()) + minSell;
-	                sellPrice = newPriceSell;
-	                System.out.println(sellPrice);
-					Thread.sleep(1000);
-	            } catch (InterruptedException e) {
-	                e.printStackTrace();
-	            }
-	        }
+                while (true) {
+                    try {
+                        int max = buyPrice + 10;
+                        int min = buyPrice - 10;
+                        int newPrice = (int) ((max - min) * Math.random()) + min;
+                        buyPrice = newPrice;
+                        System.out.println(buyPrice);
+                        int maxSell = sellPrice + 10;
+                        int minSell = sellPrice - 10;
+                        int newPriceSell = (int) ((maxSell - minSell) * Math.random()) + minSell;
+                        sellPrice = newPriceSell;
+                        System.out.println(sellPrice);
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 	    });
 		th.setName("GraphUpdater");
 		th.start();
