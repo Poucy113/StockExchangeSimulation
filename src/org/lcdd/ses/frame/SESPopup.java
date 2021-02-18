@@ -31,6 +31,8 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 	private JComponent input;
 	private List<JButton> buttons = new ArrayList<>();
 	
+	private boolean stopOnClose = false;
+	
 	private Object answer = null;
 	private PopupActionConsumer<Object> onComplete;
 	
@@ -43,7 +45,7 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 		
 		supe.getActivePopups().add(this);
 		
-		supe.setEnabled(false);
+		//supe.setEnabled(false);
 		super.setType(Type.POPUP);
 		super.setBounds(supe.getX(), supe.getY(), 325, 200);
 		super.setEnabled(true);
@@ -105,7 +107,11 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 	}
 	
 	public SESPopup onComplete(PopupActionConsumer<Object> r) {this.onComplete = r;return this;}
-	private boolean complete() {return onComplete.accept(answer);}
+	private boolean complete() {
+		if(onComplete == null)
+			return true;
+		return onComplete.accept(answer);
+	}
 	
 	public void cancel() {cancelled = true;super.dispose();}
 	
@@ -119,6 +125,8 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 	public List<JButton> getButtons() {return buttons;}
 	public PopupActionConsumer<Object> getOnComplete() {return onComplete;}
 	public boolean isCancelled() {return cancelled;}
+	public boolean isStopOnClose() {return stopOnClose;}
+	public SESPopup setStopOnClose(boolean stopOnClose) {this.stopOnClose = stopOnClose;return this;}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -154,11 +162,14 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 	@Override
 	public void windowOpened(WindowEvent e) {}
 	@Override
-	public void windowClosing(WindowEvent e) {}
-	@Override
-	public void windowClosed(WindowEvent e) {
-		supe.setEnabled(true);
+	public void windowClosing(WindowEvent e) {
+		if(isStopOnClose()) {
+			supe.dispose();
+			System.exit(0);
+		}
 	}
+	@Override
+	public void windowClosed(WindowEvent e) {}
 	@Override
 	public void windowIconified(WindowEvent e) {}
 	@Override

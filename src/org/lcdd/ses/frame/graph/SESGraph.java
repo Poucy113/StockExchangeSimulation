@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JLabel;
 
 import org.lcdd.ses.frame.SESFrame;
 import org.lcdd.ses.frame.graph.GraphicLine.GraphicLineType;
@@ -16,14 +17,18 @@ import org.lcdd.ses.frame.graph.GraphicLine.GraphicLineType;
 public class SESGraph extends JDesktopPane {
 	private static final long serialVersionUID = 1L;
 
+	private int interval = 25;
+	
     private SESFrame frame;
+    
+    private JLabel act = new JLabel("0.0€");
     
     private List<GraphicLine> lines = new ArrayList<>();
     
     public SESGraph(SESFrame frame) {
     	super();
         this.frame = frame;
-
+        
         super.setBackground(Color.WHITE);
         super.setVisible(true);
         super.setIgnoreRepaint(false);
@@ -38,8 +43,13 @@ public class SESGraph extends JDesktopPane {
     	g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.BLACK);
 		g2.drawLine(0, super.getHeight()/2, super.getWidth(), super.getHeight()/2);
-		for(int i = 0; i <= 25; i++)
-			g2.drawLine((super.getWidth() / 25)*i, 10+super.getHeight()/2, (super.getWidth() / 25)*i, super.getHeight()/2-10);
+		//for(GraphicLine l1)
+		g2.drawLine(0, 200+(super.getHeight()/2), super.getWidth(), 200+(super.getHeight()/2));
+		g2.drawLine(0, 200+(super.getHeight()/2), super.getWidth(), 200+(super.getHeight()/2));
+		g2.drawLine(0, 200+(super.getHeight()/2), super.getWidth(), 200+(super.getHeight()/2));
+		g2.drawLine(0, 200+(super.getHeight()/2), super.getWidth(), 200+(super.getHeight()/2));
+		for(int i = 0; i <= interval; i++)
+			g2.drawLine((super.getWidth() / interval)*i, 10+super.getHeight()/2, (super.getWidth() / 25)*i, super.getHeight()/2-10);
 	
     	g2.setStroke(new BasicStroke(3));
     	for(int i = 0; i < lines.size(); i++) {
@@ -54,8 +64,8 @@ public class SESGraph extends JDesktopPane {
     		
     		g2.setColor(line.getType().getColor());
     		g2.drawLine(
-					(int) (super.getWidth() / 25)*i, (lines.get(0).equals(line) ? ((int) line.getN1().getY()+(super.getHeight()/2)) : lines.get(i-1).getN2().getY()+(super.getHeight()/2)),
-        			(int) ((super.getWidth() / 25)*(i+1)), ((int) line.getN2().getY()+(super.getHeight()/2))
+					(int) (super.getWidth() / interval)*i, (lines.get(0).equals(line) ? ((int) line.getN1().getY()+(super.getHeight()/2)) : lines.get(i-1).getN2().getY()+(super.getHeight()/2)),
+        			(int) ((super.getWidth() / interval)*(i+1)), ((int) line.getN2().getY()+(super.getHeight()/2))
         	);
     	}
     }
@@ -64,7 +74,7 @@ public class SESGraph extends JDesktopPane {
     	if(lines.size() >= 1)
     		line.setN1(new GraphicNode(lines.get(lines.size()-1).getN2().getY(), true));
     	lines.add(line);
-    	if(lines.size() > 25)
+    	if(lines.size() > interval)
     		lines.remove(0);
     	return this;
     }
@@ -80,6 +90,8 @@ public class SESGraph extends JDesktopPane {
 	}
     public void update() {repaint();}
 
+    public int getInterval() {return interval;}
+    public void setInterval(int interval) {this.interval = interval;}
 	public SESFrame getFrame() {return frame;}
 	public List<GraphicLine> getLines() {return lines;}
 

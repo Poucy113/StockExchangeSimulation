@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.lcdd.ses.SESMain;
 import org.lcdd.ses.frame.SESPopup;
@@ -14,7 +17,7 @@ public class UserManager {
 
     private String path = "./saves/save-<user>.json";
     private double money = 250;
-    private int actions = 0;
+    private List<Double> actions = new ArrayList<>();
     private String username;
     private boolean New;
 
@@ -24,7 +27,6 @@ public class UserManager {
         createFiles();
         saveUser();
     }
-
 	public UserManager(String username) {
     	this.username = username;
     	createFiles();
@@ -57,7 +59,7 @@ public class UserManager {
             JSONObject userJson = new JSONObject();
             userJson.put("username", this.getUsername());
             userJson.put("money", this.getMoney());
-            userJson.put("actions", this.getActions());
+            userJson.put("actions", new JSONArray(actions));
             
             Files.write(Paths.get(path.replace("<user>", username.replaceAll(" ", "_"))), userJson.toString().getBytes());
         } catch (IOException e) {
@@ -69,41 +71,47 @@ public class UserManager {
         try {
         	JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get(path.replace("<user>", username.replaceAll(" ", "_"))))));
         	this.money = obj.getDouble("money");
-        	this.actions = obj.getInt("actions");
+        	for(Object o : obj.getJSONArray("actions").toList())
+        		this.actions.add(Double.valueOf(o.toString()));
         } catch (IOException e) {
             new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors du chargement des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
         }
     }
     
     public void buy(){
-        //if(money >= Math.round((100/GraphUpdater.getPrice())*8))    
-    		money = money - Math.round((100/GraphUpdater.getPrice())*8);
-            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez acheté une action pour " + Math.round((100/GraphUpdater.getPrice())*8), PopupType.ALERT);
-            actions++;
-        /*}else{
-            SESPopup popup = new SESPopup(null,"SES - Info", "Vous n'avez pas assez d'argent", PopupType.BOOLEAN);
-        }*/
+		double gain = round(GraphUpdater.getPrice()+(100/GraphUpdater.getPrice())*8, 2);
+		money = money - gain;
+        new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez acheté une action pour " + gain, PopupType.ALERT);
+        actions.add(gain);
+        SESMain.getFrame().resizeFrame();
     }
     public void sell(){
-        if(this.actions >= 1){
+        if(this.actions.size() >= 1){
             money = money + GraphUpdater.getPrice();
-            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez vendu une action pour " + Math.round((100/GraphUpdater.getPrice())*8), PopupType.ALERT);
-            actions--;
+            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez vendu une action pour " + GraphUpdater.getPrice(), PopupType.ALERT);
+            actions.remove(0);
+            SESMain.getFrame().resizeFrame();
         }else{
-            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous n'avez pas d'actions", PopupType.BOOLEAN);
+            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous n'avez pas d'actions", PopupType.ALERT);
         }
     }
     
-    public int getActions() {return actions;}
-    public void setActions(int actions) {this.actions = actions;}
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+    
     public double getMoney() {return money;}
     public void setMoney(double money) {this.money = money;}
     public String getUsername() {return username;}
     public void setUsername(String username) {this.username = username;}
-    public void addAction(int number){this.actions = this.getActions() + number;}
-    public void removeAction(int number){this.actions = this.getActions() - number;}
     public void addMoney(int number){this.money = this.getMoney() + number;}
     public void removeMoney(int number){this.money = this.getMoney() - number;}
     public boolean isNew() {return New;}
+    public List<Double> getActions() {return actions;}
     
 }
