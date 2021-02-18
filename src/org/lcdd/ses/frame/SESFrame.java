@@ -14,6 +14,7 @@ public class SESFrame extends JFrame {
 	private SESMenu menu;
 	
 	public SESFrame() {
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		super.setBounds(0, 0, (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
 		super.setType(Type.NORMAL);
 		super.setEnabled(true);
