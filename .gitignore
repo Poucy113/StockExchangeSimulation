@@ -12,6 +12,9 @@ local.properties
 *.classpath
 *.project
 
+#IntelliJ IDEA specific
+*.iml
+
 # External tool builders
 .externalToolBuilders/
 
