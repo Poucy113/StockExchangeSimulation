@@ -7,18 +7,27 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 
+import org.lcdd.ses.back.GraphUpdater;
+import org.lcdd.ses.back.UserManager;
 import org.lcdd.ses.frame.SESPopup.PopupType;
 import org.lcdd.ses.frame.graph.SESGraph;
 
 public class SESFrame extends JFrame implements WindowListener {
 	private static final long serialVersionUID = 1L;
 	
+	private UserManager manager;
+	private GraphUpdater updater;
+	
 	private SESGraph graph;
 	private SESMenu menu;
 	private List<SESPopup> activePopups = new ArrayList<>();
+	
+	private JButton buyButton = new JButton();
+	private JButton sellButton = new JButton();
 	
 	public SESFrame() {
 		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.INPUT_STRING);
@@ -49,18 +58,25 @@ public class SESFrame extends JFrame implements WindowListener {
 	}
 	
 	private void login(String answer) {
-		
+		updater = new GraphUpdater();
+		manager = new UserManager(answer);
 	}
 
 	public SESGraph getGraph() {return graph;}
 	public SESMenu getMenu() {return menu;}
+	public JButton getBuyButton() {return buyButton;}
+	public JButton getSellButton() {return sellButton;}
+	public GraphUpdater getUpdater() {return updater;}
+	public UserManager getManager() {return manager;}
 	
 	public List<SESPopup> getActivePopups() {return activePopups;}
 
 	@Override
 	public void windowOpened(WindowEvent e) {}
 	@Override
-	public void windowClosing(WindowEvent e) {}
+	public void windowClosing(WindowEvent e) {
+		manager.saveUser();
+	}
 	@Override
 	public void windowClosed(WindowEvent e) {
 		System.exit(e.getID());

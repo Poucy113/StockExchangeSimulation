@@ -5,15 +5,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.lcdd.ses.frame.SESPopup;
 import org.lcdd.ses.frame.SESPopup.PopupType;
 
 public class UserManager {
 
-    private String path = "./saves/save.json";
-    private int money;
+    private String path = "./saves/save-<user>.json";
+    private double money = 250;
     private int actions = 0;
     private String username;
     private boolean New;
@@ -21,12 +24,25 @@ public class UserManager {
     public UserManager(String username, int money) {
         this.money = money;
         this.username = username;
-        File file = new File("./saves/");
-        if (!file.exists()) {
+        createFiles();
+        saveUser();
+    }
+
+	public UserManager(String username) {
+    	this.username = username;
+    	createFiles();
+    	if(isNew())
+    		saveUser();
+    	else
+    		loadUser();
+	}
+	
+	private void createFiles() {
+    	File file = new File("./saves/");
+        if (!file.exists())
             file.mkdir();
-        }
-        File save = new File("./saves/save.json");
-        if (!save.exists()) {
+        File save = new File(path.replace("<user>", username));
+        if (!save.exists())
             try {
                 save.createNewFile();
                 save.setReadable(true);
@@ -35,23 +51,18 @@ public class UserManager {
             } catch (IOException e) {
             	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la création du fichier de sauvegarde: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
             }
-        }else {
+        else
         	New = false;
-        }
-        saveUser();
-    }
+	}
 
-    public void saveUser() {
-        JSONObject userJson = new JSONObject();
-        userJson.put("username", this.getUsername());
-        userJson.put("money", this.getMoney());
-        userJson.put("actions", this.getActions());
+	public void saveUser() {
         try {
-            FileWriter file = new FileWriter(path);
-            file.write(userJson.toString());
-            System.out.println(userJson.toString());
-            file.flush();
-            file.close();
+            JSONObject userJson = new JSONObject();
+            userJson.put("username", this.getUsername());
+            userJson.put("money", this.getMoney());
+            userJson.put("actions", this.getActions());
+            
+            Files.write(Paths.get(path.replace("<user>", username)), userJson.toString().getBytes());
         } catch (IOException e) {
         	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la sauvegarde des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
         }
@@ -59,22 +70,37 @@ public class UserManager {
 
     public void loadUser() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(path));
-            String json = br.readLine();
-            JSONObject JO = new JSONObject(json);
-            this.setMoney(JO.getInt("money"));
-            this.setUsername(JO.getString("username"));
-            this.setActions(JO.getInt("actions"));
-            br.close();
+        	JSONObject obj = new JSONObject(Files.readString(Paths.get(path.replace("<user>", username))));
+        	this.money = obj.getDouble("money");
+        	this.actions = obj.getInt("actions");
         } catch (IOException e) {
             new SESPopup(null, "SES - Alert", "Une erreur est survenue lors du chargement des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
         }
     }
     
+    public void buy(){
+        //if(money >= Math.round((100/GraphUpdater.getPrice())*8))    
+    		money = money - Math.round((100/GraphUpdater.getPrice())*8);
+            new SESPopup(null, "SES - Info", "Vous avez acheté une action pour " + Math.round((100/GraphUpdater.getPrice())*8), PopupType.ALERT);
+            actions++;
+        /*}else{
+            SESPopup popup = new SESPopup(null,"SES - Info", "Vous n'avez pas assez d'argent", PopupType.BOOLEAN);
+        }*/
+    }
+    public void sell(){
+        if(this.actions >= 1){
+            money = money + GraphUpdater.getPrice();
+            new SESPopup(null, "SES - Info", "Vous avez vendu une action pour " + Math.round((100/GraphUpdater.getPrice())*8), PopupType.ALERT);
+            actions--;
+        }else{
+            new SESPopup(null, "SES - Info", "Vous n'avez pas d'actions", PopupType.BOOLEAN);
+        }
+    }
+    
     public int getActions() {return actions;}
     public void setActions(int actions) {this.actions = actions;}
-    public int getMoney() {return money;}
-    public void setMoney(int money) {this.money = money;}
+    public double getMoney() {return money;}
+    public void setMoney(double money) {this.money = money;}
     public String getUsername() {return username;}
     public void setUsername(String username) {this.username = username;}
     public void addAction(int number){this.actions = this.getActions() + number;}
@@ -82,23 +108,5 @@ public class UserManager {
     public void addMoney(int number){this.money = this.getMoney() + number;}
     public void removeMoney(int number){this.money = this.getMoney() - number;}
     public boolean isNew() {return New;}
-    /*public void buy(){
-        if(this.money >= GraphUpdater.getBuyPrice()){
-            money = money - GraphUpdater.getBuyPrice();
-            SESPopup popup = new SESPopup(null,"SES - Info", "Vous avez acheté une action pour " + GraphUpdater.getBuyPrice(), PopupType.BOOLEAN);
-            actions++;
-        }else{
-            SESPopup popup = new SESPopup(null,"SES - Info", "Vous n'avez pas assez d'argent", PopupType.BOOLEAN);
-        }
-    }
-    public void sell(){
-        if(this.actions >= 1){
-            money = money + GraphUpdater.getSellPrice();
-            SESPopup popup = new SESPopup(null,"SES - Info", "Vous avez vendu une action pour " + GraphUpdater.getSellPrice(), PopupType.BOOLEAN);
-            actions--;
-        }else{
-            SESPopup popup = new SESPopup(null,"SES - Info", "Vous n'avez pas d'actions", PopupType.BOOLEAN);
-        }
-    }*/
     
 }

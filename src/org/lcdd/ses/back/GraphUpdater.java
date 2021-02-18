@@ -35,11 +35,11 @@ public class GraphUpdater{
             }
 	        private double rand() {
 	        	double d = price+(r.nextInt((int) Math.round(20 +1))-10) - (Math.random()*0.5);
-        		if(d < -350) {
-        			d += (d / 35);
+        		if(d < -200) {
+        			d += 25;
         			rand();
-        		}else if(d > 350) {
-        			d -= (d / 35);
+        		}else if(d > 200) {
+        			d -= 25;
         			rand();
         		}else
         			return d;
