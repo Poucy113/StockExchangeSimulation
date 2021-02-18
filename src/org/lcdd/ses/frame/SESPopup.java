@@ -53,6 +53,7 @@ public class SESPopup extends JFrame implements MouseListener {
 		super.setContentPane(desk);
 		super.getContentPane().setBackground(Color.GRAY);
 		super.setBounds(super.getContentPane().getBounds());
+		super.setIconImage(supe.getIconImage());
 		
 		super.setVisible(true);
 		
