@@ -13,10 +13,10 @@ import java.util.List;
 import javax.swing.JDesktopPane;
 
 import org.lcdd.ses.frame.SESFrame;
+import org.lcdd.ses.frame.graph.GraphicLine.GraphicLineType;
 
 public class SESGraph extends JDesktopPane implements ComponentListener {
-	// http://www.lirmm.fr/~leclere/enseignements/TER/2008/Rapport/18.pdf // 3.3
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
     private SESFrame frame;
     
@@ -42,30 +42,34 @@ public class SESGraph extends JDesktopPane implements ComponentListener {
     	g2.setStroke(new BasicStroke(2));
 		g2.setColor(Color.BLACK);
 		g2.drawLine(0, super.getHeight()/2, super.getWidth(), super.getHeight()/2);
-		
 		for(int i = 0; i <= 25; i++)
 			g2.drawLine((super.getWidth() / 25)*i, 10+super.getHeight()/2, (super.getWidth() / 25)*i, super.getHeight()/2-10);
 	
     	g2.setStroke(new BasicStroke(3));
     	for(int i = 0; i < lines.size(); i++) {
     		GraphicLine line = lines.get(i);
+    		
+    		if(line.getN1().getY() > line.getN2().getY())
+    			line.setType(GraphicLineType.POSITIV);
+    		if(line.getN1().getY() == line.getN2().getY())
+    			line.setType(GraphicLineType.NEUTRAL);
+    		if(line.getN1().getY() < line.getN2().getY())
+    			line.setType(GraphicLineType.NEGATIV);
+    		
     		g2.setColor(line.getType().getColor());
-    		if(lines.get(0).equals(line))
-    			g2.drawLine(
-    					(int) (super.getWidth() / 25)*i, ((int) line.getN1().getY()+(super.getHeight()/2)),
-            			(int) ((super.getWidth() / 25)*(i+1)), ((int) line.getN2().getY()+(super.getHeight()/2))
-            	);
-    		else
-    			g2.drawLine(
-        				(int) (super.getWidth() / 25)*i, ((int) lines.get(i-1).getN2().getY()+(super.getHeight()/2)),
-            			(int) (super.getWidth() / 25)*(i+1), ((int) line.getN2().getY()+(super.getHeight()/2))
-            	);
+    		g2.drawLine(
+					(int) (super.getWidth() / 25)*i, (lines.get(0).equals(line) ? ((int) line.getN1().getY()+(super.getHeight()/2)) : lines.get(i-1).getN2().getY()+(super.getHeight()/2)),
+        			(int) ((super.getWidth() / 25)*(i+1)), ((int) line.getN2().getY()+(super.getHeight()/2))
+        	);
     	}
     }
     
     public void addLine(GraphicLine line) {
-    	System.out.println("allig");
+    	if(lines.size() >= 1)
+    		line.setN1(new GraphicNode(lines.get(lines.size()-1).getN2().getY(), true));
     	lines.add(line);
+    	if(lines.size() > 25)
+    		lines.remove(0);
     }
     
     private void resizeFrame() {
@@ -80,6 +84,7 @@ public class SESGraph extends JDesktopPane implements ComponentListener {
     public void update() {repaint();}
 
 	public SESFrame getFrame() {return frame;}
+	public List<GraphicLine> getLines() {return lines;}
 
 	@Override
 	public void componentResized(ComponentEvent e) {

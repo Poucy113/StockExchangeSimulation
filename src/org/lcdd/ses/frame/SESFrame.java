@@ -32,6 +32,7 @@ public class SESFrame extends JFrame implements WindowListener {
 		desk.setBounds(super.getBounds());
 		desk.setBackground(Color.GRAY);
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		super.setTitle("StockExchangeSimulator");
 		super.setBounds(0, 0, (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
 		super.setType(Type.NORMAL);
 		super.setEnabled(true);
@@ -48,6 +49,7 @@ public class SESFrame extends JFrame implements WindowListener {
 	}
 	
 	private void login(String answer) {
+		
 	}
 
 	public SESGraph getGraph() {return graph;}

@@ -2,17 +2,21 @@ package org.lcdd.ses.frame.graph;
 
 public class GraphicNode {
 
-	private String name;
 	private int y;
 	
-	public GraphicNode(String _n, int _y) {
-		this.name = _n;
+	public GraphicNode(int _y) {
 		this.y = _y-(_y*2);
 	}
+	public GraphicNode(int _y, boolean no) {
+		this.y = _y;
+	}
 	
-	public String getName() {return name;}
-	public void setName(String name) {this.name = name;}
 	public int getY() {return y;}
 	public void setY(int y) {this.y = y;}
+	
+	@Override
+	public String toString() {
+		return y+":"+hashCode();
+	}
 	
 }
