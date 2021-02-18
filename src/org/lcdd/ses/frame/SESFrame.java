@@ -47,7 +47,6 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		desk.setBackground(Color.GRAY);
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		super.setTitle("StockExchangeSimulator");
-		super.setBounds(0, 0, (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
 		super.setType(Type.NORMAL);
 		super.setEnabled(true);
 		super.setVisible(true);
@@ -73,8 +72,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		desk.setVisible(true);
 		super.setContentPane(desk);
 		super.setIconImage(new ImageIcon("src/assets/icon.png").getImage());
-		
-		resizeFrame();
+		super.setBounds(0, 0, (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
 		
 		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.INPUT_STRING);
 		login.onComplete((answer) -> {
@@ -87,7 +85,8 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	}
 	
 	private void resizeFrame() {
-		this.graph.resizeFrame();
+		if(graph != null)
+			this.graph.resizeFrame();
 		
 		userPanelUserName.setBounds(15, 15, ((super.getContentPane().getWidth() / 10)*2)-15, ((super.getContentPane().getHeight() / 10)*2));
 		userPanelUserName.setFont(new Font(userPanelUserName.getFont().getName(), Font.PLAIN, Math.min((int)(userPanelUserName.getFont().getSize() * (double)userPanelUserName.getWidth() / (double)userPanelUserName.getFontMetrics(userPanelUserName.getFont()).stringWidth(userPanelUserName.getText())), userPanel.getHeight()/2 -10)));

@@ -3,6 +3,8 @@ package org.lcdd.ses.frame;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
-public class SESPopup extends JFrame implements MouseListener {
+public class SESPopup extends JFrame implements MouseListener, WindowListener {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -54,6 +56,7 @@ public class SESPopup extends JFrame implements MouseListener {
 		super.getContentPane().setBackground(Color.GRAY);
 		super.setBounds(super.getContentPane().getBounds());
 		super.setIconImage(supe.getIconImage());
+		super.addWindowListener(this);
 		
 		super.setVisible(true);
 		
@@ -135,6 +138,7 @@ public class SESPopup extends JFrame implements MouseListener {
 		}
 		if(complete()) {
 			supe.getActivePopups().remove(this);
+			supe.setEnabled(true);
 			super.dispose();
 		}
 	}
@@ -147,6 +151,22 @@ public class SESPopup extends JFrame implements MouseListener {
 	public void mouseEntered(MouseEvent e) {}
 	@Override
 	public void mouseExited(MouseEvent e) {}
+	@Override
+	public void windowOpened(WindowEvent e) {}
+	@Override
+	public void windowClosing(WindowEvent e) {}
+	@Override
+	public void windowClosed(WindowEvent e) {
+		supe.setEnabled(true);
+	}
+	@Override
+	public void windowIconified(WindowEvent e) {}
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+	@Override
+	public void windowActivated(WindowEvent e) {}
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 	
 	public static enum PopupType {
 		INPUT_STRING(),
