@@ -10,6 +10,7 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -80,6 +81,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		
 		desk.setVisible(true);
 		super.setContentPane(desk);
+		super.setIconImage(new ImageIcon("src/assets/icon.png").getImage());
 		
 		resizeFrame();
 	}
