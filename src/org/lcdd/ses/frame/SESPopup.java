@@ -40,9 +40,13 @@ public class SESPopup extends JFrame implements MouseListener {
 		this.msg = msg;
 		this.type = type;
 		
-		supe.setEnabled(false);
+		if(supe != null)
+			supe.setEnabled(false);
 		super.setType(Type.POPUP);
-		super.setBounds(supe.getX(), supe.getY(), 325, 200);
+		if(supe != null)
+			super.setBounds(supe.getX(), supe.getY(), 325, 200);
+		else
+			super.setBounds(100, 100, 325, 200);
 		super.setEnabled(true);
 		super.setAlwaysOnTop(true);
 		super.setResizable(false);
@@ -71,7 +75,7 @@ public class SESPopup extends JFrame implements MouseListener {
 			input = new JTextField();
 		else if(type == PopupType.INPUT_NUMBER)
 			input = new JSpinner();
-		if(type != PopupType.BOOLEAN) {
+		if(type != PopupType.BOOLEAN && type != PopupType.ALERT) {
 			input.setBounds(0, (super.getContentPane().getHeight() / 3)*1, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
 			input.setVisible(true);
 			super.getContentPane().add(input);
@@ -83,6 +87,10 @@ public class SESPopup extends JFrame implements MouseListener {
 			button2.setBounds((super.getContentPane().getWidth() / 2)*1, (super.getContentPane().getHeight() / 2)*1, (super.getContentPane().getWidth() / 2)*1, (super.getContentPane().getHeight() / 2));
 			buttons.add(button1);
 			buttons.add(button2);
+		}else if(type == PopupType.ALERT) {
+			JButton button1 = new JButton("Ok");
+			button1.setBounds(0, (super.getContentPane().getHeight() / 2)*1, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
+			buttons.add(button1);
 		}else {
 			JButton button1 = new JButton("Valider");
 			button1.setBounds(0, (super.getContentPane().getHeight() / 3)*2, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
@@ -111,12 +119,6 @@ public class SESPopup extends JFrame implements MouseListener {
 	public Consumer<Object> getOnComplete() {return onComplete;}
 	public boolean isCancelled() {return cancelled;}
 	
-	public static enum PopupType {
-		INPUT_STRING(),
-		INPUT_NUMBER(),
-		BOOLEAN();
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(isCancelled())
@@ -129,6 +131,8 @@ public class SESPopup extends JFrame implements MouseListener {
 					answer = ((JSpinner) input).getValue();
 				if(type == PopupType.INPUT_STRING)
 					answer = ((JTextField) input).getText();
+				if(type == PopupType.ALERT)
+					answer = true;
 			}
 		}
 		if(answer != null) {
@@ -145,5 +149,12 @@ public class SESPopup extends JFrame implements MouseListener {
 	public void mouseEntered(MouseEvent e) {}
 	@Override
 	public void mouseExited(MouseEvent e) {}
+	
+	public static enum PopupType {
+		INPUT_STRING(),
+		INPUT_NUMBER(),
+		BOOLEAN(),
+		ALERT();
+	}
 
 }

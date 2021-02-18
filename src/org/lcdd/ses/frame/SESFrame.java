@@ -7,6 +7,7 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 
 import org.lcdd.ses.frame.SESPopup.PopupType;
@@ -27,20 +28,24 @@ public class SESFrame extends JFrame implements WindowListener {
 		});
 		activePopups.add(login);
 		
+		JDesktopPane desk = new JDesktopPane();
+		desk.setBounds(super.getBounds());
+		desk.setBackground(Color.GRAY);
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		super.setTitle("StockExchangeSimulator");
 		super.setBounds(0, 0, (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
 		super.setType(Type.NORMAL);
 		super.setEnabled(true);
 		super.setVisible(true);
-		super.getContentPane().setBackground(Color.GRAY);
 		super.addWindowListener(this);
 		
 		this.menu = new SESMenu(this);
 		this.graph = new SESGraph(this);
-		
 		super.setMenuBar(menu);
+		desk.add(graph);
 		
-		super.add(graph);
+		desk.setVisible(true);
+		super.setContentPane(desk);
 	}
 	
 	private void login(String answer) {
@@ -54,10 +59,8 @@ public class SESFrame extends JFrame implements WindowListener {
 
 	@Override
 	public void windowOpened(WindowEvent e) {}
-
 	@Override
 	public void windowClosing(WindowEvent e) {}
-
 	@Override
 	public void windowClosed(WindowEvent e) {
 		System.exit(e.getID());
@@ -65,13 +68,10 @@ public class SESFrame extends JFrame implements WindowListener {
 
 	@Override
 	public void windowIconified(WindowEvent e) {}
-
 	@Override
 	public void windowDeiconified(WindowEvent e) {}
-
 	@Override
 	public void windowActivated(WindowEvent e) {}
-
 	@Override
 	public void windowDeactivated(WindowEvent e) {}
 

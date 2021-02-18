@@ -1,10 +1,14 @@
 package org.lcdd.ses.back;
 
-import org.json.JSONObject;
-import org.lcdd.ses.SESMain;
-import org.lcdd.ses.frame.SESPopup;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
-import java.io.*;
+import org.json.JSONObject;
+import org.lcdd.ses.frame.SESPopup;
+import org.lcdd.ses.frame.SESPopup.PopupType;
 
 public class UserManager {
 
@@ -12,6 +16,7 @@ public class UserManager {
     private int money;
     private int actions = 0;
     private String username;
+    private boolean New;
 
     public UserManager(String username, int money) {
         this.money = money;
@@ -26,62 +31,14 @@ public class UserManager {
                 save.createNewFile();
                 save.setReadable(true);
                 save.setWritable(true);
+                New = true;
             } catch (IOException e) {
-                e.printStackTrace();
+            	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la création du fichier de sauvegarde: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
             }
+        }else {
+        	New = false;
         }
         saveUser();
-    }
-
-    public int getActions() {
-        return actions;
-    }
-
-    public void setActions(int actions) {
-        this.actions = actions;
-    }
-
-    public int getMoney() {
-        return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void addAction(int number){
-        this.actions = this.getActions() + number;
-    }
-
-    public void removeAction(int number){
-        this.actions = this.getActions() - number;
-    }
-
-    public void addMoney(int number){
-        this.money = this.getMoney() + number;
-    }
-
-    public void removeMoney(int number){
-        this.money = this.getMoney() - number;
-    }
-
-    public void buy(){
-        if(this.money >= GraphUpdater.getBuyPrice()) {
-            this.money = this.money - GraphUpdater.getBuyPrice();
-            this.actions++;
-            SESPopup popup = new SESPopup(null,"SES - Info", "Vous avez achetÃ© une action pour " + GraphUpdater.getBuyPrice(), SESPopup.PopupType.BOOLEAN);
-        }else{
-            SESPopup popup = new SESPopup(null,"SES - Info", "Vous n'avez pas assez d'argent", SESPopup.PopupType.BOOLEAN);
-        }
-
     }
 
     public void saveUser() {
@@ -94,8 +51,9 @@ public class UserManager {
             file.write(userJson.toString());
             System.out.println(userJson.toString());
             file.flush();
+            file.close();
         } catch (IOException e) {
-            e.printStackTrace();
+        	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la sauvegarde des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
         }
     }
 
@@ -107,8 +65,22 @@ public class UserManager {
             this.setMoney(JO.getInt("money"));
             this.setUsername(JO.getString("username"));
             this.setActions(JO.getInt("actions"));
+            br.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            new SESPopup(null, "SES - Alert", "Une erreur est survenue lors du chargement des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
         }
     }
+    
+    public int getActions() {return actions;}
+    public void setActions(int actions) {this.actions = actions;}
+    public int getMoney() {return money;}
+    public void setMoney(int money) {this.money = money;}
+    public String getUsername() {return username;}
+    public void setUsername(String username) {this.username = username;}
+    public void addAction(int number){this.actions = this.getActions() + number;}
+    public void removeAction(int number){this.actions = this.getActions() - number;}
+    public void addMoney(int number){this.money = this.getMoney() + number;}
+    public void removeMoney(int number){this.money = this.getMoney() - number;}
+    public boolean isNew() {return New;}
+    
 }
