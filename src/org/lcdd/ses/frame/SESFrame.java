@@ -42,15 +42,6 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	private JButton sellButton = new JButton();
 	
 	public SESFrame() {
-		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.INPUT_STRING);
-		login.onComplete((answer) -> {
-			boolean b = correctUsername(answer);
-			if(b)
-				login();
-			return b;
-		});
-		activePopups.add(login);
-		
 		JDesktopPane desk = new JDesktopPane();
 		desk.setBounds(super.getBounds());
 		desk.setBackground(Color.GRAY);
@@ -84,6 +75,15 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		super.setIconImage(new ImageIcon("src/assets/icon.png").getImage());
 		
 		resizeFrame();
+		
+		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.INPUT_STRING);
+		login.onComplete((answer) -> {
+			boolean b = correctUsername(answer);
+			if(b)
+				login();
+			return b;
+		});
+		activePopups.add(login);
 	}
 	
 	private void resizeFrame() {
@@ -125,6 +125,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		userPanelUserName.setText(username);
 		
 		resizeFrame();
+		resizeFrame();
 	}
 
 	public SESGraph getGraph() {return graph;}
@@ -142,7 +143,8 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	public void windowOpened(WindowEvent e) {}
 	@Override
 	public void windowClosing(WindowEvent e) {
-		manager.saveUser();
+		if(manager != null)
+			manager.saveUser();
 	}
 	@Override
 	public void windowClosed(WindowEvent e) {
