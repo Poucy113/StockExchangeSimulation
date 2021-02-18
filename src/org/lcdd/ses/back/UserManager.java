@@ -82,5 +82,23 @@ public class UserManager {
     public void addMoney(int number){this.money = this.getMoney() + number;}
     public void removeMoney(int number){this.money = this.getMoney() - number;}
     public boolean isNew() {return New;}
+    public void buy(){
+        if(this.money >= GraphUpdater.getBuyPrice()){
+            money = money - GraphUpdater.getBuyPrice();
+            SESPopup popup = new SESPopup(null,"SES - Info", "Vous avez acheté une action pour " + GraphUpdater.getBuyPrice(), PopupType.BOOLEAN);
+            actions++;
+        }else{
+            SESPopup popup = new SESPopup(null,"SES - Info", "Vous n'avez pas assez d'argent", PopupType.BOOLEAN);
+        }
+    }
+    public void sell(){
+        if(this.actions >= 1){
+            money = money + GraphUpdater.getSellPrice();
+            SESPopup popup = new SESPopup(null,"SES - Info", "Vous avez vendu une action pour " + GraphUpdater.getSellPrice(), PopupType.BOOLEAN);
+            actions--;
+        }else{
+            SESPopup popup = new SESPopup(null,"SES - Info", "Vous n'avez pas d'actions", PopupType.BOOLEAN);
+        }
+    }
     
 }

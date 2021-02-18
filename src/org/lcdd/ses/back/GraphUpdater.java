@@ -18,10 +18,7 @@ public class GraphUpdater{
                         int newPrice = (int) ((max - min) * Math.random()) + min;
                         buyPrice = newPrice;
                         System.out.println(buyPrice);
-                        int maxSell = sellPrice + 10;
-                        int minSell = sellPrice - 10;
-                        int newPriceSell = (int) ((maxSell - minSell) * Math.random()) + minSell;
-                        sellPrice = newPriceSell;
+                        sellPrice = Math.round((100/buyPrice)*8);
                         System.out.println(sellPrice);
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
