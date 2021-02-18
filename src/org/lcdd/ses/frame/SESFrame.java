@@ -67,7 +67,7 @@ public class SESFrame extends JFrame implements WindowListener {
 			return false;
 		if(((String) answer).equals(" ".repeat(((String) answer).length())))
 			return false;
-		this.username = ((String) answer).replaceAll(" ", "_");
+		this.username = ((String) answer)/*.replaceAll(" ", "_")*/;
 		return true;
 	}
 
