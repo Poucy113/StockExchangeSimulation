@@ -19,6 +19,8 @@ public class SESPopup extends JFrame implements MouseListener {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private boolean cancelled;
+	
 	private JFrame supe;
 	private String name;
 	private String msg;
@@ -96,6 +98,8 @@ public class SESPopup extends JFrame implements MouseListener {
 	public SESPopup onComplete(Consumer<Object> r) {this.onComplete = r;return this;}
 	private void complete() {onComplete.accept(answer);}
 	
+	public void cancel() {cancelled = true;super.dispose();}
+	
 	public Object getAnswer() {return answer;}
 	public JFrame getFrame() {return supe;}
 	public String getMsg() {return msg;}
@@ -105,6 +109,7 @@ public class SESPopup extends JFrame implements MouseListener {
 	public JComponent getInput() {return input;}
 	public List<JButton> getButtons() {return buttons;}
 	public Consumer<Object> getOnComplete() {return onComplete;}
+	public boolean isCancelled() {return cancelled;}
 	
 	public static enum PopupType {
 		INPUT_STRING(),
@@ -114,6 +119,8 @@ public class SESPopup extends JFrame implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		if(isCancelled())
+			return;
 		for(JButton b : buttons) {
 			if(e.getComponent().equals(b)) {
 				if(type == PopupType.BOOLEAN)

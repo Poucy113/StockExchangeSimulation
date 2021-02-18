@@ -17,15 +17,15 @@ public class SESFrame extends JFrame implements WindowListener {
 	
 	private SESGraph graph;
 	private SESMenu menu;
-	private List<SESPopup> popups = new ArrayList<>();
+	private List<SESPopup> activePopups = new ArrayList<>();
 	
 	public SESFrame() {
 		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.INPUT_STRING);
 		login.onComplete((answer) -> {
 			login((String) answer);
-			popups.remove(login);
+			activePopups.remove(login);
 		});
-		popups.add(login);
+		activePopups.add(login);
 		
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		super.setBounds(0, 0, (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
@@ -50,7 +50,7 @@ public class SESFrame extends JFrame implements WindowListener {
 	public SESGraph getGraph() {return graph;}
 	public SESMenu getMenu() {return menu;}
 	
-	public List<SESPopup> getPopups() {return popups;}
+	public List<SESPopup> getActivePopups() {return activePopups;}
 
 	@Override
 	public void windowOpened(WindowEvent e) {}
