@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
+import org.lcdd.ses.frame.graph.SESGraph;
 import org.lcdd.ses.utils.SESServer;
 
 public class SESFrame extends JFrame {

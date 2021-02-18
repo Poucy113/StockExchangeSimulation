@@ -1,7 +1,8 @@
-package org.lcdd.ses.frame;
+package org.lcdd.ses.frame.graph;
 
 import javax.swing.JComponent;
 
+import org.lcdd.ses.frame.SESFrame;
 import org.lcdd.ses.utils.SESServer;
 
 public class SESGraph extends JComponent {
