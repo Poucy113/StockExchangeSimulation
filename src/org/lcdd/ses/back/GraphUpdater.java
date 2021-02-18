@@ -8,7 +8,7 @@ public class GraphUpdater{
     private static Thread th;
     
     public GraphUpdater() {
-		this.th = new Thread(new Runnable() {
+		th = new Thread(new Runnable() {
 	        @Override
 	        public void run() {
 	            try {
