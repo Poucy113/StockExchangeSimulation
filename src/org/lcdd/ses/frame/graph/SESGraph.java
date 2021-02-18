@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,7 @@ import javax.swing.JDesktopPane;
 import org.lcdd.ses.frame.SESFrame;
 import org.lcdd.ses.frame.graph.GraphicLine.GraphicLineType;
 
-public class SESGraph extends JDesktopPane implements ComponentListener {
+public class SESGraph extends JDesktopPane {
 	private static final long serialVersionUID = 1L;
 
     private SESFrame frame;
@@ -26,11 +24,9 @@ public class SESGraph extends JDesktopPane implements ComponentListener {
     	super();
         this.frame = frame;
 
-        resizeFrame();
         super.setBackground(Color.WHITE);
         super.setVisible(true);
         super.setIgnoreRepaint(false);
-        frame.addComponentListener(this);
     }
     
     @Override
@@ -73,7 +69,7 @@ public class SESGraph extends JDesktopPane implements ComponentListener {
     	return this;
     }
     
-    private void resizeFrame() {
+    public void resizeFrame() {
     	Rectangle rect = (Rectangle) frame.getBounds().clone();
         rect.setBounds(
         		(int) ((rect.getWidth() / 10)*2),
@@ -86,17 +82,5 @@ public class SESGraph extends JDesktopPane implements ComponentListener {
 
 	public SESFrame getFrame() {return frame;}
 	public List<GraphicLine> getLines() {return lines;}
-
-	@Override
-	public void componentResized(ComponentEvent e) {
-		resizeFrame();
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {}
-	@Override
-	public void componentShown(ComponentEvent e) {}
-	@Override
-	public void componentHidden(ComponentEvent e) {}
 
 }
