@@ -38,7 +38,7 @@ public class UserManager {
     	File file = new File("./saves/");
         if (!file.exists())
             file.mkdir();
-        File save = new File(path.replace("<user>", username));
+        File save = new File(path.replace("<user>", username.replaceAll(" ", "_")));
         if (!save.exists())
             try {
                 save.createNewFile();
@@ -46,7 +46,7 @@ public class UserManager {
                 save.setWritable(true);
                 New = true;
             } catch (IOException e) {
-            	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la création du fichier de sauvegarde: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+            	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la création du fichier de sauvegarde: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
             }
         else
         	New = false;
@@ -59,19 +59,19 @@ public class UserManager {
             userJson.put("money", this.getMoney());
             userJson.put("actions", this.getActions());
             
-            Files.write(Paths.get(path.replace("<user>", username)), userJson.toString().getBytes());
+            Files.write(Paths.get(path.replace("<user>", username.replaceAll(" ", "_"))), userJson.toString().getBytes());
         } catch (IOException e) {
-        	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la sauvegarde des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+        	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la sauvegarde des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
         }
     }
 
     public void loadUser() {
         try {
-        	JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get(path.replace("<user>", username)))));
+        	JSONObject obj = new JSONObject(new String(Files.readAllBytes(Paths.get(path.replace("<user>", username.replaceAll(" ", "_"))))));
         	this.money = obj.getDouble("money");
         	this.actions = obj.getInt("actions");
         } catch (IOException e) {
-            new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors du chargement des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> System.exit(0));
+            new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors du chargement des données: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
         }
     }
     

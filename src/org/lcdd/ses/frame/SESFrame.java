@@ -19,6 +19,7 @@ import org.lcdd.ses.frame.graph.SESGraph;
 public class SESFrame extends JFrame implements WindowListener {
 	private static final long serialVersionUID = 1L;
 	
+	private String username;
 	private UserManager manager;
 	private GraphUpdater updater;
 	
@@ -32,8 +33,10 @@ public class SESFrame extends JFrame implements WindowListener {
 	public SESFrame() {
 		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.INPUT_STRING);
 		login.onComplete((answer) -> {
-			login((String) answer);
-			activePopups.remove(login);
+			boolean b = correctUsername(answer);
+			if(b)
+				login();
+			return b;
 		});
 		activePopups.add(login);
 		
@@ -57,9 +60,20 @@ public class SESFrame extends JFrame implements WindowListener {
 		super.setContentPane(desk);
 	}
 	
-	private void login(String answer) {
+	private boolean correctUsername(Object answer) {
+		if(!(answer instanceof String))
+			return false;
+		if(((String) answer).length() == 0)
+			return false;
+		if(((String) answer).equals(" ".repeat(((String) answer).length())))
+			return false;
+		this.username = ((String) answer)/*.replaceAll(" ", "_")*/;
+		return true;
+	}
+
+	private void login() {
 		updater = new GraphUpdater();
-		manager = new UserManager(answer);
+		manager = new UserManager(username);
 	}
 
 	public SESGraph getGraph() {return graph;}
