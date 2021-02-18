@@ -10,8 +10,6 @@ public class SESMain {
         frame = new SESFrame();
     }
 
-    public static SESFrame getFrame() {
-        return frame;
-    }
+    public static SESFrame getFrame() {return frame;}
 
 }
