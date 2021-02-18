@@ -78,7 +78,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		login.onComplete((answer) -> {
 			boolean b = correctUsername(answer);
 			if(b)
-				login();
+				login((String) answer);
 			return b;
 		});
 		activePopups.add(login);
@@ -88,8 +88,11 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		if(graph != null)
 			this.graph.resizeFrame();
 		
-		userPanelUserName.setBounds(15, 15, ((super.getContentPane().getWidth() / 10)*2)-15, ((super.getContentPane().getHeight() / 10)*2));
-		userPanelUserName.setFont(new Font(userPanelUserName.getFont().getName(), Font.PLAIN, Math.min((int)(userPanelUserName.getFont().getSize() * (double)userPanelUserName.getWidth() / (double)userPanelUserName.getFontMetrics(userPanelUserName.getFont()).stringWidth(userPanelUserName.getText())), userPanel.getHeight()/2 -10)));
+		if(username != null) {
+			userPanelUserName.setText(username);
+			userPanelUserName.setBounds(15, 15, ((super.getContentPane().getWidth() / 10)*2)-15, ((super.getContentPane().getHeight() / 10)*2));
+			userPanelUserName.setFont(new Font(userPanelUserName.getFont().getName(), Font.PLAIN, Math.min((int)(userPanelUserName.getFont().getSize() * (double)userPanelUserName.getWidth() / (double)userPanelUserName.getFontMetrics(userPanelUserName.getFont()).stringWidth(userPanelUserName.getText())), userPanel.getHeight()/2 -10)));
+		}
 		
 		userPanelMoneyCount.setForeground(GraphicLineType.getFor((manager != null ? manager.getMoney() : 0)).getColor());
 		userPanelMoneyCount.setText((manager != null ? manager.getMoney() : 0)+" €");
@@ -106,7 +109,6 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 			return false;
 		if(((String) answer).equals(repeat(" ", ((String) answer).length())))
 			return false;
-		this.username = ((String) answer);
 		return true;
 	}
 
@@ -117,7 +119,9 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		return s;
 	}
 
-	private void login() {
+	private void login(String answer) {
+		this.username = answer;
+		
 		updater = new GraphUpdater();
 		manager = new UserManager(username);
 		
