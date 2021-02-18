@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -28,6 +29,7 @@ public class SESPopup extends JFrame implements MouseListener {
 	private List<JButton> buttons = new ArrayList<>();
 	
 	private Object answer = null;
+	private Consumer<Object> onComplete;
 	
 	public SESPopup(JFrame supe, String title, String msg, PopupType type) {
 		super(title);
@@ -39,15 +41,17 @@ public class SESPopup extends JFrame implements MouseListener {
 		supe.setEnabled(false);
 		super.setType(Type.POPUP);
 		super.setBounds(supe.getX(), supe.getY(), 325, 200);
-		super.setVisible(true);
 		super.setEnabled(true);
 		super.setAlwaysOnTop(true);
-		//super.setResizable(false);
+		super.setResizable(false);
 		
 		JDesktopPane desk = new JDesktopPane();
-		desk.setBounds(0, 0, super.getWidth(), super.getHeight());
+		desk.setBounds(0, 0, 325, 200);
 		super.setContentPane(desk);
 		super.getContentPane().setBackground(Color.GRAY);
+		super.setBounds(super.getContentPane().getBounds());
+		
+		super.setVisible(true);
 		
 		setup();
 	}
@@ -55,9 +59,9 @@ public class SESPopup extends JFrame implements MouseListener {
 	private void setup() {
 		label = new JLabel(msg);
 		if(type == PopupType.BOOLEAN)
-			label.setBounds(0, (super.getHeight() / 2)*0, super.getWidth(), (super.getHeight() / 2));
+			label.setBounds(0, (super.getContentPane().getHeight() / 2)*0, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 2));
 		else
-			label.setBounds(0, (super.getHeight() / 3)*0, super.getWidth(), (super.getHeight() / 3));
+			label.setBounds(0, (super.getContentPane().getHeight() / 3)*0, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
 		label.setVisible(true);
 		super.getContentPane().add(label);
 		
@@ -66,20 +70,20 @@ public class SESPopup extends JFrame implements MouseListener {
 		else if(type == PopupType.INPUT_NUMBER)
 			input = new JSpinner();
 		if(type != PopupType.BOOLEAN) {
-			input.setBounds(0, (super.getHeight() / 2)*1, super.getWidth(), (super.getHeight() / 2));
+			input.setBounds(0, (super.getContentPane().getHeight() / 3)*1, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
 			input.setVisible(true);
 			super.getContentPane().add(input);
 		}
 		
 		if(type == PopupType.BOOLEAN) {
 			JButton button1 = new JButton("Oui"), button2 = new JButton("Non");
-			button1.setBounds((super.getWidth() / 2)*0, (super.getHeight() / 2)*1, (super.getWidth() / 2)*1, (super.getHeight() / 2));
-			button2.setBounds((super.getWidth() / 2)*1, (super.getHeight() / 2)*1, (super.getWidth() / 2)*1, (super.getHeight() / 2));
+			button1.setBounds((super.getContentPane().getWidth() / 2)*0, (super.getContentPane().getHeight() / 2)*1, (super.getContentPane().getWidth() / 2)*1, (super.getContentPane().getHeight() / 2));
+			button2.setBounds((super.getContentPane().getWidth() / 2)*1, (super.getContentPane().getHeight() / 2)*1, (super.getContentPane().getWidth() / 2)*1, (super.getContentPane().getHeight() / 2));
 			buttons.add(button1);
 			buttons.add(button2);
 		}else {
 			JButton button1 = new JButton("Valider");
-			button1.setBounds(0, (super.getHeight() / 3)*2, super.getWidth(), (super.getHeight() / 3));
+			button1.setBounds(0, (super.getContentPane().getHeight() / 3)*2, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
 			buttons.add(button1);
 		}
 		for(JButton b : buttons) {
@@ -89,15 +93,18 @@ public class SESPopup extends JFrame implements MouseListener {
 		}
 	}
 	
-	public Object getAnswer() {return answer;}
+	public SESPopup onComplete(Consumer<Object> r) {this.onComplete = r;return this;}
+	private void complete() {onComplete.accept(answer);}
 	
-	public JFrame getSupe() {return supe;}
+	public Object getAnswer() {return answer;}
+	public JFrame getFrame() {return supe;}
 	public String getMsg() {return msg;}
 	public String getName() {return name;}
 	public PopupType getPopupType() {return type;}
 	public JLabel getLabel() {return label;}
 	public JComponent getInput() {return input;}
 	public List<JButton> getButtons() {return buttons;}
+	public Consumer<Object> getOnComplete() {return onComplete;}
 	
 	public static enum PopupType {
 		INPUT_STRING(),
@@ -117,19 +124,18 @@ public class SESPopup extends JFrame implements MouseListener {
 					answer = ((JTextField) input).getText();
 			}
 		}
-		if(answer != null)
+		if(answer != null) {
+			complete();
 			super.dispose();
+		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}
-
 	@Override
 	public void mouseReleased(MouseEvent e) {}
-
 	@Override
 	public void mouseEntered(MouseEvent e) {}
-
 	@Override
 	public void mouseExited(MouseEvent e) {}
 

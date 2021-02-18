@@ -20,7 +20,11 @@ public class SESFrame extends JFrame implements WindowListener {
 	private List<SESPopup> popups = new ArrayList<>();
 	
 	public SESFrame() {
-		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.BOOLEAN);
+		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.INPUT_STRING);
+		login.onComplete((answer) -> {
+			login((String) answer);
+			popups.remove(login);
+		});
 		popups.add(login);
 		
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -39,6 +43,10 @@ public class SESFrame extends JFrame implements WindowListener {
 		super.add(graph);
 	}
 	
+	private void login(String answer) {
+		
+	}
+
 	public SESGraph getGraph() {return graph;}
 	public SESMenu getMenu() {return menu;}
 	
