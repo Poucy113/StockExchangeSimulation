@@ -14,7 +14,7 @@ public class GraphUpdater{
 	
     private static Thread th;
     
-    public GraphUpdater() {
+    public GraphUpdater(EnterpriseManager en) {
 		th = new Thread(new Runnable() {
 			private Random r = new Random();
 	        @Override
