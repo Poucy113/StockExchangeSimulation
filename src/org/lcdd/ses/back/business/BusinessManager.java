@@ -15,7 +15,7 @@ import org.lcdd.ses.frame.SESPopup.PopupType;
 
 public class BusinessManager {
 
-    private String path = "./saves/enterprises.json";
+    private String path = "./saves/businesses.json";
     private boolean New = false;
     
     private List<Business> businesses = new ArrayList<>();
@@ -23,7 +23,7 @@ public class BusinessManager {
     private Business baseBusiness;
 
     public BusinessManager(){
-        File file = new File("./saves/enterprises.json");
+        File file = new File("./saves/businesses.json");
         if(!file.exists()){
             try {
                 file.createNewFile();
@@ -42,8 +42,8 @@ public class BusinessManager {
     public void base() {
     	baseBusiness = new Business("Le coin des developpeurs", -5, 10, 1250);
     	if(isNew()) {
-    		businesses.add(new Business("Le jardin des lapins", -12, 3, 850));
-    		businesses.add(new Business("LapiAxel", -2, 7, 650));
+    		businesses.add(new Business("Le jardin des lapins", -8, 4, 850));
+    		businesses.add(new Business("Axelapin", -2, 7, 650));
     		businesses.add(new Business("Fondactul", -5, 9, 1120));
     	}
     }
@@ -52,8 +52,8 @@ public class BusinessManager {
        try {
     	   JSONArray obj = new JSONArray(new String(Files.readAllBytes(Paths.get(path))));
            for(int i = 0; i < obj.length(); i++) {
-           	JSONObject o = obj.getJSONObject(i);
-           	businesses.add(new Business(o.getString("name"), o.getInt("min"), o.getInt("max"), o.getInt("max-update-time")));
+           		JSONObject o = obj.getJSONObject(i);
+           		businesses.add(new Business(o.getString("name"), o.getInt("min"), o.getInt("max"), o.getInt("max-update-time")));
            }
        }catch(IOException e) {
     	   new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors du chargement du fichier d'entreprises: "+e.getLocalizedMessage(), PopupType.ALERT).setStopOnClose(true);

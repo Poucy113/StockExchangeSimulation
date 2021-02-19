@@ -15,6 +15,8 @@ public class Business {
 	private GraphUpdater graphUpdater;
 	private SESGraph graph;
 	
+	private boolean started = false;
+	
 	public Business(String _n, int _m1, int _m2, int _m3) {
 		this.name = _n;
 		this.min = _m1;
@@ -25,6 +27,7 @@ public class Business {
 	public Business start(SESFrame frame) {
 		graphUpdater = new GraphUpdater(this);
 		graph = new SESGraph(frame, this);
+		started = true;
 		return this;
 	}
 	public void show(SESFrame frame) {
@@ -32,6 +35,7 @@ public class Business {
 		frame.resizeFrame();
 	}
 	
+	public boolean isStarted() {return started;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
 	public int getMax() {return max;}

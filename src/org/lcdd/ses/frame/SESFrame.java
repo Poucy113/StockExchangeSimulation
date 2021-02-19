@@ -22,9 +22,11 @@ import javax.swing.JPanel;
 import org.lcdd.ses.SESMain;
 import org.lcdd.ses.back.GraphUpdater;
 import org.lcdd.ses.back.UserManager;
+import org.lcdd.ses.back.business.Action;
 import org.lcdd.ses.back.business.BusinessManager;
 import org.lcdd.ses.frame.SESPopup.PopupType;
 import org.lcdd.ses.frame.graph.GraphicLine.GraphicLineType;
+import org.lcdd.ses.frame.menu.SESMenu;
 import org.lcdd.ses.frame.graph.SESGraph;
 
 public class SESFrame extends JFrame implements WindowListener, ComponentListener {
@@ -60,16 +62,14 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		super.addWindowListener(this);
 		super.addComponentListener(this);
 		
-		this.menu = new SESMenu(this);
-		super.setMenuBar(menu);
-		
 		userPanel(desk);
 		buttons(desk);
 		
 		desk.setVisible(true);
 		super.setContentPane(desk);
 		super.setIconImage(new ImageIcon("src/assets/icon.png").getImage());
-		super.setBounds(0, 0, (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
+		super.setSize((int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
+		super.setLocation((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2 - getWidth()/2, (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()/2 - getHeight()/2);
 		
 		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.INPUT_STRING);
 		login.setStopOnClose(true);
@@ -141,6 +141,8 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	public void resizeFrame() {
 		if(graph != null)
 			this.graph.resizeFrame();
+		if(menu != null)
+			this.menu.resizeFrame();
 		
 		if(username != null) {
 			userPanelUserName.setText(username);
@@ -149,7 +151,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		}
 		
 		userPanelMoneyCount.setForeground(GraphicLineType.getFor((manager != null ? manager.getMoney() : 0)).getColor());
-		userPanelMoneyCount.setText((manager != null ? manager.getMoney() : 0)+" €");
+		userPanelMoneyCount.setText(UserManager.round((manager != null ? manager.getMoney() : 0), 2)+" €");
 		userPanelMoneyCount.setBounds(10, 15+userPanelUserName.getHeight(), ((super.getContentPane().getWidth() / 10)*2)-15, ((super.getContentPane().getHeight() / 10)*2));
 		userPanelMoneyCount.setFont(new Font(userPanelMoneyCount.getFont().getName(), Font.PLAIN, Math.min((int)(userPanelMoneyCount.getFont().getSize() * (double)userPanelMoneyCount.getWidth() / (double)userPanelMoneyCount.getFontMetrics(userPanelMoneyCount.getFont()).stringWidth(userPanelMoneyCount.getText())), userPanel.getHeight()/2 -10)));
 		
@@ -162,17 +164,34 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		if(graph != null) {
 			buyButton.setBounds(graph.getX()+(graph.getWidth()/2*0), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
 			if(manager != null)
-				sellButton.setText((manager.getActions().size() > 0 ? "Vendre: "+manager.getActions().get(0) : "Vendre"));
+				sellButton.setText((manager.getActions().size() > 0 ? "Vendre: "+manager.getActions().get(0).getAmount()+"€" : "Vendre"));
 			sellButton.setBounds(graph.getX()+(graph.getWidth()/2*1), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
 		}
+	}
+	
+	private void login(String answer) {
+		this.username = answer;
+		
+		bManager.getBaseBusiness().start(this).show(this);
+		manager = new UserManager(username);
+		
+		this.menu = new SESMenu(this);
+		super.setJMenuBar(menu);
+		
+		userPanelUserName.setText(username);
+		
+		resizeFrame();
+		resizeFrame();
 	}
 	
 	private String getActionsText() {
 		StringBuilder sb = new StringBuilder();
 		int i = 1;
-		for(double d : manager.getActions()) {
-			sb.append(i+": "+d+"<br>");
-			i++;
+		for(Action d : manager.getActions()) {
+			if(d.getBusiness().getName().equals(this.getGraph().getBusiness().getName())) {
+				sb.append(i+": "+d.getAmount()+"€<br>");
+				i++;
+			}
 		}
 		return sb.toString();
 	}
@@ -194,18 +213,6 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		return s;
 	}
 
-	private void login(String answer) {
-		this.username = answer;
-		
-		bManager.getBaseBusiness().start(this).show(this);
-		manager = new UserManager(username);
-		
-		userPanelUserName.setText(username);
-		
-		resizeFrame();
-		resizeFrame();
-	}
-
 	public SESGraph getGraph() {return graph;}
 	public SESMenu getMenu() {return menu;}
 	public JButton getBuyButton() {return buyButton;}
@@ -214,7 +221,12 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	public UserManager getManager() {return manager;}
 	public String getUsername() {return username;}
 	public JPanel getUserPanel() {return userPanel;}
-	public void setGraph(SESGraph graph) {super.remove(graph);this.graph = graph;super.add(graph);}
+	public void setGraph(SESGraph graph) {
+		if(this.graph != null)
+			super.getContentPane().remove(this.graph);
+		this.graph = graph;
+		super.getContentPane().add(graph);
+	}
 	public BusinessManager getbManager() {return bManager;}
 	public List<SESPopup> getActivePopups() {return activePopups;}
 

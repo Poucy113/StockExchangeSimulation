@@ -45,15 +45,16 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 		
 		supe.getActivePopups().add(this);
 		
-		//supe.setEnabled(false);
 		super.setType(Type.POPUP);
-		super.setBounds(supe.getX(), supe.getY(), 325, 200);
+		super.setSize(325, 200);
+		super.setLocation(supe.getWidth()/2 -super.getWidth()/2, supe.getHeight()/2 -super.getHeight()/2);
+		
 		super.setEnabled(true);
 		super.setAlwaysOnTop(true);
 		super.setResizable(false);
 		
 		JDesktopPane desk = new JDesktopPane();
-		desk.setBounds(0, 0, 325, 200);
+		desk.setBounds(supe.getWidth()/2 -super.getWidth()/2, supe.getHeight()/2 -super.getHeight()/2, 325, 200);
 		super.setContentPane(desk);
 		super.getContentPane().setBackground(Color.GRAY);
 		super.setBounds(super.getContentPane().getBounds());
