@@ -1,13 +1,15 @@
 package org.lcdd.ses.frame.graph;
 
-import java.awt.Color;
+import java.awt.geom.Line2D;
 
-public class GraphicLine {
+public class GraphicLine extends Line2D.Float {
+	private static final long serialVersionUID = 1L;
 	
 	private GraphicNode n1, n2;
 	private GraphicLineType type;
 	
 	public GraphicLine(GraphicNode n1, GraphicNode n2) {
+		super(0, n1.getY(), 0, n2.getY());
 		this.n1 = n1;
 		this.n2 = n2;
 	}
@@ -24,22 +26,4 @@ public class GraphicLine {
 		return type+":"+n1+":"+n2+":"+hashCode();
 	}
 	
-	public enum GraphicLineType {
-		POSITIV(Color.GREEN),
-		NEUTRAL(Color.GRAY),
-		NEGATIV(Color.RED);
-		private Color color;
-		private GraphicLineType(Color color) {this.color = color;}
-		public Color getColor() {return color;}
-		public static GraphicLineType getFor(double d) {
-			if(Double.valueOf(d) < 0)
-				return NEGATIV;
-			if(Double.valueOf(d) == 0)
-				return NEUTRAL;
-			if(Double.valueOf(d) > 0)
-				return POSITIV;
-			return NEUTRAL;
-		}
-	}
-
 }

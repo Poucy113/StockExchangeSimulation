@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,6 @@ import javax.swing.JLabel;
 
 import org.lcdd.ses.back.business.Business;
 import org.lcdd.ses.frame.SESFrame;
-import org.lcdd.ses.frame.graph.GraphicLine.GraphicLineType;
 
 public class SESGraph extends JDesktopPane {
 	private static final long serialVersionUID = 1L;
@@ -57,10 +57,11 @@ public class SESGraph extends JDesktopPane {
 					0, l1.getN1().getY()+(super.getHeight()/2),
 					super.getWidth(), l1.getN2().getY()+(super.getHeight()/2)
         	);
-			g2.drawString(l1.getN1().getY()+"", 5, ((l1.getN1().getY()+2)*(-1))+(super.getHeight()/2));
+			g2.drawString((l1.getN1().getY()/100)+"", 5, ((l1.getN1().getY()+2)*(-1))+(super.getHeight()/2));
 		}
 			
 		for(int i = 0; i <= interval; i++)
+			//g2.draw(new Line2D.Double(((double) (super.getWidth() / interval))*i, 10+super.getHeight()/2, ((double) (super.getWidth() / interval))*i, super.getHeight()/2-10));
 			g2.drawLine((super.getWidth() / interval)*i, 10+super.getHeight()/2, (super.getWidth() / interval)*i, super.getHeight()/2-10);
 	
     	g2.setStroke(new BasicStroke(3));
@@ -75,10 +76,16 @@ public class SESGraph extends JDesktopPane {
     			line.setType(GraphicLineType.NEGATIV);
     		
     		g2.setColor(line.getType().getColor());
-    		g2.drawLine(
+    		g2.draw(
+    				new Line2D.Double(
+    						(double) (super.getWidth() / interval)*i, (double) (lines.get(0).equals(line) ? line.getN1().getY()+(super.getHeight()/2) : lines.get(i-1).getN2().getY()+(super.getHeight()/2)),
+    	        			(double) ((super.getWidth() / interval)*(i+1)), ((double) line.getN2().getY()+(super.getHeight()/2))
+    				)
+    		);
+    		/*g2.drawLine(
 					(int) (super.getWidth() / interval)*i, (lines.get(0).equals(line) ? ((int) line.getN1().getY()+(super.getHeight()/2)) : lines.get(i-1).getN2().getY()+(super.getHeight()/2)),
         			(int) ((super.getWidth() / interval)*(i+1)), ((int) line.getN2().getY()+(super.getHeight()/2))
-        	);
+        	);*/
     	}
     }
     

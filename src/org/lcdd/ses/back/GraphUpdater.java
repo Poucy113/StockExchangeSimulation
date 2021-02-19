@@ -33,6 +33,10 @@ public class GraphUpdater {
                     	if(business.getGraph() != null)
                     		business.getGraph().addLine(new GraphicLine(new GraphicNode((int) oldPrice), new GraphicNode((int) newPrice))).update();
                     	
+                    	if(SESMain.getFrame().getGraph() != null)
+                    		if(SESMain.getFrame().getGraph().getBusiness().equals(business))
+                        		SESMain.getFrame().updateBusinessPanel();
+                    	
                         Thread.sleep(r.nextInt(en.getMaxUpdateTime()));
                     } catch (InterruptedException e) {
                     	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la generation aléatoire: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});

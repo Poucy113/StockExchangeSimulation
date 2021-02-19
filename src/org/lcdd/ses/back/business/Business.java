@@ -1,12 +1,17 @@
 package org.lcdd.ses.back.business;
 
+import javax.swing.ImageIcon;
+
 import org.lcdd.ses.back.GraphUpdater;
 import org.lcdd.ses.frame.SESFrame;
 import org.lcdd.ses.frame.graph.SESGraph;
 
 public class Business {
 	
+	private static final ImageIcon BASE_ICON = new ImageIcon("src/assets/base-business-icon.png");
+	
 	private String name;
+	private ImageIcon icon = BASE_ICON;
 	private int max = 0;
 	private int min = 0;
 	
@@ -48,5 +53,7 @@ public class Business {
 	public void setGraphUpdater(GraphUpdater graphUpdater) {this.graphUpdater = graphUpdater;}
 	public int getMaxUpdateTime() {return maxUpdateTime;}
 	public void setMaxUpdateTime(int maxUpdateTime) {this.maxUpdateTime = maxUpdateTime;}
+	public ImageIcon getIcon() {return icon;}
+	public void setIcon(ImageIcon icon) {this.icon = icon;}
 	
 }

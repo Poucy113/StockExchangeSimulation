@@ -18,6 +18,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 import org.lcdd.ses.SESMain;
 import org.lcdd.ses.back.GraphUpdater;
@@ -25,9 +26,9 @@ import org.lcdd.ses.back.UserManager;
 import org.lcdd.ses.back.business.Action;
 import org.lcdd.ses.back.business.BusinessManager;
 import org.lcdd.ses.frame.SESPopup.PopupType;
-import org.lcdd.ses.frame.graph.GraphicLine.GraphicLineType;
-import org.lcdd.ses.frame.menu.SESMenu;
+import org.lcdd.ses.frame.graph.GraphicLineType;
 import org.lcdd.ses.frame.graph.SESGraph;
+import org.lcdd.ses.frame.menu.SESMenu;
 
 public class SESFrame extends JFrame implements WindowListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
@@ -45,6 +46,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	private JLabel userPanelUserName = new JLabel();
 	private JLabel userPanelMoneyCount = new JLabel();
 	private JLabel userPanelActionsList = new JLabel("Vos actions:");
+	private JPanel userPanelBusinessInfo = new JPanel();
 	
 	private JButton buyButton = new JButton();
 	private JButton sellButton = new JButton();
@@ -135,6 +137,9 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		userPanelActionsList.setVisible(true);
 		userPanelActionsList.setForeground(Color.WHITE);
 		userPanel.add(userPanelActionsList);
+		userPanelBusinessInfo.setBackground(Color.LIGHT_GRAY);
+		userPanelBusinessInfo.setVisible(true);
+		userPanel.add(userPanelBusinessInfo);
 		desk.add(userPanel);
 	}
 
@@ -155,9 +160,20 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		userPanelMoneyCount.setBounds(10, 15+userPanelUserName.getHeight(), ((super.getContentPane().getWidth() / 10)*2)-15, ((super.getContentPane().getHeight() / 10)*2));
 		userPanelMoneyCount.setFont(new Font(userPanelMoneyCount.getFont().getName(), Font.PLAIN, Math.min((int)(userPanelMoneyCount.getFont().getSize() * (double)userPanelMoneyCount.getWidth() / (double)userPanelMoneyCount.getFontMetrics(userPanelMoneyCount.getFont()).stringWidth(userPanelMoneyCount.getText())), userPanel.getHeight()/2 -10)));
 		
-		userPanelActionsList.setBounds(10, 15+userPanelUserName.getHeight()+userPanelMoneyCount.getHeight(), ((super.getContentPane().getWidth() / 10)*2)-15, userPanel.getHeight()-(userPanelUserName.getHeight()+userPanelMoneyCount.getHeight()));
+		userPanelActionsList.setBounds(10, 15+userPanelUserName.getHeight()+userPanelMoneyCount.getHeight(), userPanel.getWidth()-10, userPanel.getHeight()-userPanelUserName.getHeight()-userPanelMoneyCount.getHeight() -/*Math.min(*/40/*, (int) (userPanel.getHeight()/2.5))*/);
 		if(manager != null)
 			userPanelActionsList.setText("<html>Vos actions:<br>"+getActionsText()+"</html>");
+		
+		if(bManager != null) {
+			//int h = userPanelUserName.getHeight()+userPanelMoneyCount.getHeight()+userPanelActionsList.getHeight();
+			userPanelBusinessInfo.setBounds(
+					10,
+					(int) ((int) userPanel.getHeight() -(userPanel.getHeight()/2.5)),
+					userPanelActionsList.getWidth(),
+					40
+			);
+			updateBusinessPanel();
+		}
 		
 		userPanel.setBounds(5, 5, ((super.getContentPane().getWidth() / 10)*2)-10, super.getContentPane().getHeight()-5);
 		
@@ -168,12 +184,31 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 			sellButton.setBounds(graph.getX()+(graph.getWidth()/2*1), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
 		}
 	}
-	
+	public void updateBusinessPanel() {
+		userPanelBusinessInfo.removeAll();
+		userPanelBusinessInfo.setBorder(new TitledBorder("Entreprise"));
+		if(graph != null && updater != null) {
+			JLabel icon = new JLabel(this.graph.getBusiness().getIcon());
+			icon.setVisible(true);
+			JLabel txt = new JLabel(
+				"<html>"+
+					this.graph.getBusiness().getName()+"<br>"+
+					(this.graph.getBusiness().getMin()*(-1))+" - "+(this.updater.getPrice()/100)+" + "+this.graph.getBusiness().getMax()+"<br>"+
+					this.graph.getBusiness().getMaxUpdateTime()+
+				"</html>"
+			);
+			txt.setVisible(true);
+			userPanelBusinessInfo.add(icon);
+			userPanelBusinessInfo.add(txt);
+		}
+	}
+
 	private void login(String answer) {
 		this.username = answer;
 		
-		bManager.getBaseBusiness().start(this).show(this);
-		manager = new UserManager(username);
+		this.bManager.getBaseBusiness().start(this).show(this);
+		this.manager = new UserManager(username);
+		this.updater = graph.getBusiness().getGraphUpdater();
 		
 		this.menu = new SESMenu(this);
 		super.setJMenuBar(menu);
