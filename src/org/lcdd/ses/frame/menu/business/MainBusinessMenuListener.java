@@ -23,10 +23,10 @@ public class MainBusinessMenuListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (button) {
-		case SESMenu.DELETE:
+		case SESMenu.BUSINESS_DELETE:
 			deleteFrame(null, 0);
 			break;
-		case SESMenu.CREATE:
+		case SESMenu.BUSINESS_CREATE:
 			createFrame(null, 0);
 			break;
 		}

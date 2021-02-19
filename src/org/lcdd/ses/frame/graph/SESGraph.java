@@ -19,12 +19,12 @@ import org.lcdd.ses.frame.graph.GraphicLine.GraphicLineType;
 public class SESGraph extends JDesktopPane {
 	private static final long serialVersionUID = 1L;
 
-	private int interval = 25;
+	private static int interval = 25;
 	
     private SESFrame frame;
     private Business business;
     
-    private JLabel act = new JLabel("0.0€");
+    private JLabel act = new JLabel("0.0 €");
     
     private List<GraphicLine> lines = new ArrayList<>();
     
@@ -44,7 +44,7 @@ public class SESGraph extends JDesktopPane {
     	
     	Graphics2D g2 = (Graphics2D) g;
     	
-    	g2.setStroke(new BasicStroke(2));
+    	g2.setStroke(new BasicStroke(1));
 		g2.setColor(Color.BLACK);
 		for(GraphicLine l1 : Arrays.asList(
 					new GraphicLine(new GraphicNode(200), new GraphicNode(200)),
@@ -61,7 +61,7 @@ public class SESGraph extends JDesktopPane {
 		}
 			
 		for(int i = 0; i <= interval; i++)
-			g2.drawLine((super.getWidth() / interval)*i, 10+super.getHeight()/2, (super.getWidth() / 25)*i, super.getHeight()/2-10);
+			g2.drawLine((super.getWidth() / interval)*i, 10+super.getHeight()/2, (super.getWidth() / interval)*i, super.getHeight()/2-10);
 	
     	g2.setStroke(new BasicStroke(3));
     	for(int i = 0; i < lines.size(); i++) {
@@ -103,7 +103,7 @@ public class SESGraph extends JDesktopPane {
     public void update() {repaint();}
 
     public int getInterval() {return interval;}
-    public void setInterval(int interval) {this.interval = interval;}
+    public void setInterval(int interval) {SESGraph.interval = interval;}
 	public SESFrame getFrame() {return frame;}
 	public List<GraphicLine> getLines() {return lines;}
 	public Business getBusiness() {return business;}
