@@ -52,7 +52,7 @@ public class GraphUpdater{
 
     //public static int getBuyPrice() {return buyPrice;}
     //public static int getSellPrice() {return sellPrice;}
-    public static double getPrice() {return price;}
+    public static double getPrice() {return UserManager.round(price, 2);}
     public static Thread getUpdaterThread() {return th;}
 
 }

@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.lcdd.ses.SESMain;
 import org.lcdd.ses.back.GraphUpdater;
 import org.lcdd.ses.back.UserManager;
 import org.lcdd.ses.frame.SESPopup.PopupType;
@@ -37,6 +40,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	private JPanel userPanel = new JPanel();
 	private JLabel userPanelUserName = new JLabel();
 	private JLabel userPanelMoneyCount = new JLabel();
+	private JLabel userPanelActionsList = new JLabel("Vos actions:");
 	
 	private JButton buyButton = new JButton();
 	private JButton sellButton = new JButton();
@@ -49,7 +53,6 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		super.setTitle("StockExchangeSimulator");
 		super.setType(Type.NORMAL);
 		super.setEnabled(true);
-		super.setVisible(true);
 		super.addWindowListener(this);
 		super.addComponentListener(this);
 		
@@ -58,16 +61,8 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		super.setMenuBar(menu);
 		desk.add(graph);
 		
-		userPanel.setBackground(Color.LIGHT_GRAY);
-		userPanel.setVisible(true);
-		userPanelUserName.setVisible(true);
-		userPanelUserName.setForeground(Color.WHITE);
-		userPanel.add(userPanelUserName);
-		userPanelMoneyCount.setBackground(GraphicLineType.POSITIV.getColor());
-		userPanelMoneyCount.setVisible(true);
-		userPanelMoneyCount.setForeground(Color.WHITE);
-		userPanel.add(userPanelMoneyCount);
-		desk.add(userPanel);
+		userPanel(desk);
+		buttons(desk);
 		
 		desk.setVisible(true);
 		super.setContentPane(desk);
@@ -75,33 +70,113 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		super.setBounds(0, 0, (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
 		
 		SESPopup login = new SESPopup(this, "SES - Login", "Veuillez entrer votre nom d'utilisateur:", PopupType.INPUT_STRING);
+		login.setStopOnClose(true);
 		login.onComplete((answer) -> {
 			boolean b = correctUsername(answer);
 			if(b)
 				login((String) answer);
 			return b;
 		});
-		activePopups.add(login);
+		
+		super.setVisible(true);
 	}
 	
-	private void resizeFrame() {
+	private void buttons(JDesktopPane desk) {
+		//buyButton.setIcon(new ImageIcon("src/assets/buy-icon.png"));
+		buyButton.setText("Acheter");
+		buyButton.setVisible(true);
+		buyButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				SESMain.getFrame().getManager().buy();
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+		});
+		desk.add(buyButton);
+		
+		//sellButton.setIcon(new ImageIcon("src/assets/sell-icon.png"));
+		if(manager != null)
+			sellButton.setText((manager.getActions().size() > 0 ? "Vendre: "+manager.getActions().get(0) : "Vendre"));
+		else
+			sellButton.setText("Vendre");
+		sellButton.setVisible(true);
+		sellButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				SESMain.getFrame().getManager().sell();
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+		});
+		desk.add(sellButton);
+	}
+	private void userPanel(JDesktopPane desk) {
+		userPanel.setBackground(Color.LIGHT_GRAY);
+		userPanel.setVisible(true);
+		userPanelUserName.setVisible(true);
+		userPanelUserName.setForeground(Color.WHITE);
+		userPanel.add(userPanelUserName);
+		userPanelMoneyCount.setVisible(true);
+		userPanelMoneyCount.setForeground(Color.WHITE);
+		userPanel.add(userPanelMoneyCount);
+		userPanelActionsList.setVisible(true);
+		userPanelActionsList.setForeground(Color.WHITE);
+		userPanel.add(userPanelActionsList);
+		desk.add(userPanel);
+	}
+
+	public void resizeFrame() {
 		if(graph != null)
 			this.graph.resizeFrame();
 		
 		if(username != null) {
 			userPanelUserName.setText(username);
-			userPanelUserName.setBounds(15, 15, ((super.getContentPane().getWidth() / 10)*2)-15, ((super.getContentPane().getHeight() / 10)*2));
+			userPanelUserName.setBounds(10, 15, ((super.getContentPane().getWidth() / 10)*2)-15, ((super.getContentPane().getHeight() / 10)*2));
 			userPanelUserName.setFont(new Font(userPanelUserName.getFont().getName(), Font.PLAIN, Math.min((int)(userPanelUserName.getFont().getSize() * (double)userPanelUserName.getWidth() / (double)userPanelUserName.getFontMetrics(userPanelUserName.getFont()).stringWidth(userPanelUserName.getText())), userPanel.getHeight()/2 -10)));
 		}
 		
 		userPanelMoneyCount.setForeground(GraphicLineType.getFor((manager != null ? manager.getMoney() : 0)).getColor());
 		userPanelMoneyCount.setText((manager != null ? manager.getMoney() : 0)+" €");
-		userPanelMoneyCount.setBounds(15, 15+userPanelUserName.getHeight(), ((super.getContentPane().getWidth() / 10)*2)-15, ((super.getContentPane().getHeight() / 10)*2));
+		userPanelMoneyCount.setBounds(10, 15+userPanelUserName.getHeight(), ((super.getContentPane().getWidth() / 10)*2)-15, ((super.getContentPane().getHeight() / 10)*2));
 		userPanelMoneyCount.setFont(new Font(userPanelMoneyCount.getFont().getName(), Font.PLAIN, Math.min((int)(userPanelMoneyCount.getFont().getSize() * (double)userPanelMoneyCount.getWidth() / (double)userPanelMoneyCount.getFontMetrics(userPanelMoneyCount.getFont()).stringWidth(userPanelMoneyCount.getText())), userPanel.getHeight()/2 -10)));
 		
-		userPanel.setBounds(10, 10, ((super.getContentPane().getWidth() / 10)*2)-10, ((super.getContentPane().getHeight() / 10)*4)+10);
+		userPanelActionsList.setBounds(10, 15+userPanelUserName.getHeight()+userPanelMoneyCount.getHeight(), ((super.getContentPane().getWidth() / 10)*2)-15, userPanel.getHeight()-(userPanelUserName.getHeight()+userPanelMoneyCount.getHeight()));
+		if(manager != null)
+			userPanelActionsList.setText("<html>Vos actions:<br>"+getActionsText()+"</html>");
+		
+		userPanel.setBounds(5, 5, ((super.getContentPane().getWidth() / 10)*2)-10, super.getContentPane().getHeight()-5);
+		
+		buyButton.setBounds(graph.getX()+(graph.getWidth()/2*0), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
+		if(manager != null)
+			sellButton.setText((manager.getActions().size() > 0 ? "Vendre: "+manager.getActions().get(0) : "Vendre"));
+		sellButton.setBounds(graph.getX()+(graph.getWidth()/2*1), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
 	}
 	
+	private String getActionsText() {
+		StringBuilder sb = new StringBuilder();
+		
+		int i = 1;
+		for(double d : manager.getActions()) {
+			sb.append(i+": "+d+"<br>");
+			i++;
+		}
+		
+		return sb.toString();
+	}
+
 	private boolean correctUsername(Object answer) {
 		if(!(answer instanceof String))
 			return false;
@@ -126,6 +201,8 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		manager = new UserManager(username);
 		
 		userPanelUserName.setText(username);
+		
+		//buttons((JDesktopPane) super.getContentPane());
 		
 		resizeFrame();
 		resizeFrame();
