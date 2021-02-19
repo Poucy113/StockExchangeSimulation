@@ -3,20 +3,25 @@ package org.lcdd.ses.back;
 import java.util.Random;
 
 import org.lcdd.ses.SESMain;
+import org.lcdd.ses.back.business.Business;
 import org.lcdd.ses.frame.SESPopup;
 import org.lcdd.ses.frame.SESPopup.PopupType;
 import org.lcdd.ses.frame.graph.GraphicLine;
 import org.lcdd.ses.frame.graph.GraphicNode;
 
-public class GraphUpdater{
+public class GraphUpdater {
 
-    private static double price = 100;
+    private double price = 100;
 	
-    private static Thread th;
+    private Thread th;
     
-    public GraphUpdater(EnterpriseManager en) {
+    private Business business;
+    
+    public GraphUpdater(Business en) {
+    	this.business = en;
 		th = new Thread(new Runnable() {
 			private Random r = new Random();
+			private double d;
 	        @Override
 	        public void run() {
                 while (true) {
@@ -25,34 +30,33 @@ public class GraphUpdater{
                     	price = rand();
                     	double newPrice = price;
                     	
-                    	SESMain.getFrame().getGraph().addLine(new GraphicLine(new GraphicNode((int) oldPrice), new GraphicNode((int) newPrice))).update();
+                    	if(business.getGraph() != null)
+                    		business.getGraph().addLine(new GraphicLine(new GraphicNode((int) oldPrice), new GraphicNode((int) newPrice))).update();
                     	
-                        Thread.sleep(r.nextInt(1250));
+                        Thread.sleep(r.nextInt(en.getMaxUpdateTime()));
                     } catch (InterruptedException e) {
-                    	new SESPopup(null, "SES - Alert", "Une erreur est survenue lors de la generation aléatoire: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
+                    	new SESPopup(SESMain.getFrame(), "SES - Alert", "Une erreur est survenue lors de la generation aléatoire: "+e.getLocalizedMessage(), PopupType.ALERT).onComplete((es) -> {System.exit(0);return true;});
                     }
                 }
             }
 	        private double rand() {
-	        	double d = price+(r.nextInt((int) Math.round(20 +1))-10) - (Math.random()*0.5);
-        		if(d < -200) {
-        			d += 25;
-        			rand();
+	        	d = price+((r.nextInt(en.getMin()*(-1) + en.getMax() +1))-(en.getMax() /(r.nextInt(2) +1)));
+	        	if(d < -200) {
+	        		d += r.nextInt(35);
+	        		rand();
         		}else if(d > 200) {
-        			d -= 25;
+        			d -= r.nextInt(35);
         			rand();
-        		}else
-        			return d;
+        		}
 				return d;
 	        }
 	    });
-		th.setName("GraphUpdater");
+		th.setName("GraphUpdater-["+en.getName()+"]");
 		th.start();
 	}
 
-    //public static int getBuyPrice() {return buyPrice;}
-    //public static int getSellPrice() {return sellPrice;}
-    public static double getPrice() {return UserManager.round(price, 2);}
-    public static Thread getUpdaterThread() {return th;}
+    public double getPrice() {return UserManager.round(price, 2);}
+    public Thread getUpdaterThread() {return th;}
+    public Business getBusiness() {return business;}
 
 }

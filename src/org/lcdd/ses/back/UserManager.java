@@ -79,7 +79,7 @@ public class UserManager {
     }
     
     public void buy(){
-		double gain = round(GraphUpdater.getPrice()+(100/GraphUpdater.getPrice())*8, 2);
+		double gain = round(SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice()+(100/SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice())*8, 2);
 		money = money - gain;
         new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez acheté une action pour " + gain, PopupType.ALERT);
         actions.add(gain);
@@ -87,8 +87,8 @@ public class UserManager {
     }
     public void sell(){
         if(this.actions.size() >= 1){
-            money = money + GraphUpdater.getPrice();
-            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez vendu une action pour " + GraphUpdater.getPrice(), PopupType.ALERT);
+            money = money + SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice();
+            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez vendu une action pour " + SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice(), PopupType.ALERT);
             actions.remove(0);
             SESMain.getFrame().resizeFrame();
         }else{

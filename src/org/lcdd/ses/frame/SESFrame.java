@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import org.lcdd.ses.SESMain;
 import org.lcdd.ses.back.GraphUpdater;
 import org.lcdd.ses.back.UserManager;
+import org.lcdd.ses.back.business.BusinessManager;
 import org.lcdd.ses.frame.SESPopup.PopupType;
 import org.lcdd.ses.frame.graph.GraphicLine.GraphicLineType;
 import org.lcdd.ses.frame.graph.SESGraph;
@@ -32,8 +33,9 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	private String username;
 	private UserManager manager;
 	private GraphUpdater updater;
-	
 	private SESGraph graph;
+	private BusinessManager bManager;
+	
 	private SESMenu menu;
 	private List<SESPopup> activePopups = new ArrayList<>();
 	
@@ -45,7 +47,9 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	private JButton buyButton = new JButton();
 	private JButton sellButton = new JButton();
 	
-	public SESFrame() {
+	public SESFrame(BusinessManager manager) {
+		this.bManager = manager;
+		
 		JDesktopPane desk = new JDesktopPane();
 		desk.setBounds(super.getBounds());
 		desk.setBackground(Color.GRAY);
@@ -57,9 +61,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		super.addComponentListener(this);
 		
 		this.menu = new SESMenu(this);
-		this.graph = new SESGraph(this);
 		super.setMenuBar(menu);
-		desk.add(graph);
 		
 		userPanel(desk);
 		buttons(desk);
@@ -82,7 +84,6 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	}
 	
 	private void buttons(JDesktopPane desk) {
-		//buyButton.setIcon(new ImageIcon("src/assets/buy-icon.png"));
 		buyButton.setText("Acheter");
 		buyButton.setVisible(true);
 		buyButton.addMouseListener(new MouseListener() {
@@ -101,7 +102,6 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		});
 		desk.add(buyButton);
 		
-		//sellButton.setIcon(new ImageIcon("src/assets/sell-icon.png"));
 		if(manager != null)
 			sellButton.setText((manager.getActions().size() > 0 ? "Vendre: "+manager.getActions().get(0) : "Vendre"));
 		else
@@ -159,21 +159,21 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		
 		userPanel.setBounds(5, 5, ((super.getContentPane().getWidth() / 10)*2)-10, super.getContentPane().getHeight()-5);
 		
-		buyButton.setBounds(graph.getX()+(graph.getWidth()/2*0), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
-		if(manager != null)
-			sellButton.setText((manager.getActions().size() > 0 ? "Vendre: "+manager.getActions().get(0) : "Vendre"));
-		sellButton.setBounds(graph.getX()+(graph.getWidth()/2*1), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
+		if(graph != null) {
+			buyButton.setBounds(graph.getX()+(graph.getWidth()/2*0), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
+			if(manager != null)
+				sellButton.setText((manager.getActions().size() > 0 ? "Vendre: "+manager.getActions().get(0) : "Vendre"));
+			sellButton.setBounds(graph.getX()+(graph.getWidth()/2*1), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
+		}
 	}
 	
 	private String getActionsText() {
 		StringBuilder sb = new StringBuilder();
-		
 		int i = 1;
 		for(double d : manager.getActions()) {
 			sb.append(i+": "+d+"<br>");
 			i++;
 		}
-		
 		return sb.toString();
 	}
 
@@ -197,12 +197,10 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	private void login(String answer) {
 		this.username = answer;
 		
-		updater = new GraphUpdater();
+		bManager.getBaseBusiness().start(this).show(this);
 		manager = new UserManager(username);
 		
 		userPanelUserName.setText(username);
-		
-		//buttons((JDesktopPane) super.getContentPane());
 		
 		resizeFrame();
 		resizeFrame();
@@ -216,7 +214,8 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	public UserManager getManager() {return manager;}
 	public String getUsername() {return username;}
 	public JPanel getUserPanel() {return userPanel;}
-	
+	public void setGraph(SESGraph graph) {super.remove(graph);this.graph = graph;super.add(graph);}
+	public BusinessManager getbManager() {return bManager;}
 	public List<SESPopup> getActivePopups() {return activePopups;}
 
 	@Override
@@ -225,6 +224,8 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	public void windowClosing(WindowEvent e) {
 		if(manager != null)
 			manager.saveUser();
+		if(bManager != null)
+			bManager.saveAll();
 	}
 	@Override
 	public void windowClosed(WindowEvent e) {
