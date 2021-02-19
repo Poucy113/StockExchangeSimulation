@@ -212,7 +212,8 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 			s += string;
 		return s;
 	}
-
+	
+	public void setMenu(SESMenu menu) {this.menu = menu;}
 	public SESGraph getGraph() {return graph;}
 	public SESMenu getMenu() {return menu;}
 	public JButton getBuyButton() {return buyButton;}
