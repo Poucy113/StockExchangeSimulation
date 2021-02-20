@@ -44,7 +44,7 @@ public class GraphUpdater {
                 }
             }
 	        private double rand() {
-	        	d = price+((r.nextInt(en.getMin()*(-1) + en.getMax() +1))-(en.getMax() /(r.nextInt(2) +1)));
+	        	d = price+(r.nextInt(en.getMin()*(-1)+en.getMax() +1) -(en.getMin()*(-1)/* - Math.min(en.getMin()*(-1), en.getMax())*/));
 	        	if(d < -200) {
 	        		d += r.nextInt(35);
 	        		rand();

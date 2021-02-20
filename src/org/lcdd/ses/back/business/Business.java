@@ -36,6 +36,7 @@ public class Business {
 		return this;
 	}
 	public void show(SESFrame frame) {
+		frame.setUpdater(graphUpdater);
 		frame.setGraph(this.graph);
 		frame.resizeFrame();
 	}
