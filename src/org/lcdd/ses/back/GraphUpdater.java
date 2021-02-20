@@ -34,8 +34,10 @@ public class GraphUpdater {
                     		business.getGraph().addLine(new GraphicLine(new GraphicNode((int) oldPrice), new GraphicNode((int) newPrice))).update();
                     	
                     	if(SESMain.getFrame().getGraph() != null)
-                    		if(SESMain.getFrame().getGraph().getBusiness().equals(business))
+                    		if(SESMain.getFrame().getGraph().getBusiness().equals(business)) {
                         		SESMain.getFrame().updateBusinessPanel();
+                        		SESMain.getFrame().updateButtons();
+                    		}
                     	
                         Thread.sleep(r.nextInt(en.getMaxUpdateTime()));
                     } catch (InterruptedException e) {

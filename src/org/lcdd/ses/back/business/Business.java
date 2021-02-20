@@ -30,8 +30,7 @@ public class Business {
 		this.max = _m2;
 		this.maxUpdateTime = _m3;
 		
-		if(contains(new File("./src/assets/").list(), (name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"))) 
-			icon = new ImageIcon("./src/assets/"+(name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"));
+		getIcon();
 	}
 	
 	private boolean contains(String[] list, String replaceAll) {
@@ -66,7 +65,11 @@ public class Business {
 	public void setGraphUpdater(GraphUpdater graphUpdater) {this.graphUpdater = graphUpdater;}
 	public int getMaxUpdateTime() {return maxUpdateTime;}
 	public void setMaxUpdateTime(int maxUpdateTime) {this.maxUpdateTime = maxUpdateTime;}
-	public ImageIcon getIcon() {return icon;}
+	public ImageIcon getIcon() {
+		if(contains(new File("./src/assets/").list(), (name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"))) 
+			icon = new ImageIcon("./src/assets/"+(name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"));
+		return icon;
+	}
 	public void setIcon(ImageIcon icon) {this.icon = icon;}
 	
 }

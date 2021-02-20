@@ -57,8 +57,8 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		JDesktopPane desk = new JDesktopPane();
 		desk.setBounds(super.getBounds());
 		desk.setBackground(Color.GRAY);
-		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		super.setTitle("StockExchangeSimulator");
+		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		super.setTitle("Simulateur de bourse");
 		super.setType(Type.NORMAL);
 		super.setEnabled(true);
 		super.addWindowListener(this);
@@ -86,7 +86,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	}
 	
 	private void buttons(JDesktopPane desk) {
-		buyButton.setText("Acheter");
+		buyButton.setText("Acheter"+(updater != null ? ": "+updater.getPrice() : ""));
 		buyButton.setVisible(true);
 		buyButton.addMouseListener(new MouseListener() {
 			@Override
@@ -127,6 +127,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	}
 	private void userPanel(JDesktopPane desk) {
 		userPanel.setBackground(Color.LIGHT_GRAY);
+		userPanel.setBorder(new TitledBorder("Panneau utilisateur"));
 		userPanel.setVisible(true);
 		userPanelUserName.setVisible(true);
 		userPanelUserName.setForeground(Color.WHITE);
@@ -176,13 +177,9 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		}
 		
 		userPanel.setBounds(5, 5, ((super.getContentPane().getWidth() / 10)*2)-10, super.getContentPane().getHeight()-5);
-		
-		if(graph != null) {
-			buyButton.setBounds(graph.getX()+(graph.getWidth()/2*0), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
-			if(manager != null)
-				sellButton.setText((manager.getActions().size() > 0 ? "Vendre: "+manager.getActions().get(0).getAmount()+"€" : "Vendre"));
-			sellButton.setBounds(graph.getX()+(graph.getWidth()/2*1), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
-		}
+	
+		updateBusinessPanel();
+		updateButtons();
 	}
 	public void updateBusinessPanel() {
 		userPanelBusinessInfo.removeAll();
@@ -200,6 +197,16 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 			txt.setVisible(true);
 			userPanelBusinessInfo.add(icon);
 			userPanelBusinessInfo.add(txt);
+		}
+	}
+	public void updateButtons() {
+		buyButton.setText("Acheter"+(updater != null ? ": "+updater.getPrice() : ""));
+		
+		if(graph != null) {
+			buyButton.setBounds(graph.getX()+(graph.getWidth()/2*0), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
+			if(manager != null)
+				sellButton.setText((manager.getActions().size() > 0 ? "Vendre: "+manager.getActions().get(0).getAmount()+"€" : "Vendre"));
+			sellButton.setBounds(graph.getX()+(graph.getWidth()/2*1), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
 		}
 	}
 
