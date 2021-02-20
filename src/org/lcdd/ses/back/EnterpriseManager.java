@@ -1,14 +1,10 @@
 package org.lcdd.ses.back;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class EnterpriseManager {
 
@@ -76,7 +72,7 @@ public class EnterpriseManager {
 
     }
     public void start(){
-        graph = new GraphUpdater(this);
+        graph = new GraphUpdater(/*is*/);
     }
 
     public GraphUpdater getGraph() {
