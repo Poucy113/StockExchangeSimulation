@@ -1,5 +1,7 @@
 package org.lcdd.ses.back.business;
 
+import java.io.File;
+
 import javax.swing.ImageIcon;
 
 import org.lcdd.ses.back.GraphUpdater;
@@ -12,8 +14,8 @@ public class Business {
 	
 	private String name;
 	private ImageIcon icon = BASE_ICON;
-	private int max = 0;
-	private int min = 0;
+	private double max = 0;
+	private double min = 0;
 	
 	private int maxUpdateTime = 1250;
 	
@@ -27,11 +29,14 @@ public class Business {
 		this.min = _m1;
 		this.max = _m2;
 		this.maxUpdateTime = _m3;
+		
+		getIcon();
 	}
 	
 	public Business start(SESFrame frame) {
 		graphUpdater = new GraphUpdater(this);
-		graph = new SESGraph(frame, this);
+		if(frame != null)
+			graph = new SESGraph(frame, this);
 		started = true;
 		return this;
 	}
@@ -41,20 +46,31 @@ public class Business {
 		frame.resizeFrame();
 	}
 	
+	private boolean contains(String[] list, String replaceAll) {
+		for(String s : list)
+			if(s.equals(replaceAll))
+				return true;
+		return false;
+	}
+	
 	public boolean isStarted() {return started;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
-	public int getMax() {return max;}
-	public void setMax(int max) {this.max = max;}
-	public int getMin() {return min;}
-	public void setMin(int min) {this.min = min;}
+	public double getMax() {return max;}
+	public void setMax(double max) {this.max = max;}
+	public double getMin() {return min;}
+	public void setMin(double min) {this.min = min;}
 	public SESGraph getGraph() {return graph;}
 	public void setGraph(SESGraph graph) {this.graph = graph;}
 	public GraphUpdater getGraphUpdater() {return graphUpdater;}
 	public void setGraphUpdater(GraphUpdater graphUpdater) {this.graphUpdater = graphUpdater;}
 	public int getMaxUpdateTime() {return maxUpdateTime;}
 	public void setMaxUpdateTime(int maxUpdateTime) {this.maxUpdateTime = maxUpdateTime;}
-	public ImageIcon getIcon() {return icon;}
+	public ImageIcon getIcon() {
+		if(contains(new File("./src/assets/").list(), (name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"))) 
+			icon = new ImageIcon("./src/assets/"+(name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"));
+		return icon;
+	}
 	public void setIcon(ImageIcon icon) {this.icon = icon;}
 	
 }

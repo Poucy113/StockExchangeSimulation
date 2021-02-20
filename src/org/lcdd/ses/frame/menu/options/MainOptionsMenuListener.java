@@ -3,6 +3,7 @@ package org.lcdd.ses.frame.menu.options;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import org.lcdd.ses.SESMain;
 import org.lcdd.ses.frame.SESFrame;
 import org.lcdd.ses.frame.SESPopup;
 import org.lcdd.ses.frame.SESPopup.PopupType;
@@ -23,6 +24,11 @@ public class MainOptionsMenuListener implements ActionListener {
 		switch (option) {
 		case SESMenu.OPTIONS_GRAPH_INTERVAL:
 			graphInterval();
+			break;
+		case SESMenu.OPTIONS_CLEAR_POPUPS:
+			for(SESPopup p : SESMain.getFrame().getActivePopups())
+				if(p.getPopupType() == PopupType.ALERT)
+					p.dispose();
 			break;
 		}
 	}

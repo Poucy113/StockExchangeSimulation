@@ -3,6 +3,7 @@ package org.lcdd.ses.frame.menu;
 import java.awt.MenuComponent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
@@ -76,6 +77,10 @@ public class MenuConstructor {
         public MenuItemConstructor removeActionListener(ActionListener l) {
             this.item.removeActionListener(l);
             return this;
+        }
+        public MenuItemConstructor setIcon(ImageIcon icon) {
+        	item.setIcon(icon);
+        	return this;
         }
         public MenuItemConstructor addActionListener(ActionListener l) {
             this.item.addActionListener(l);

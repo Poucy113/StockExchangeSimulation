@@ -17,6 +17,7 @@ public class SESMenu extends JMenuBar {
 	public static final int BUSINESS_CREATE        =  0;
 	
 	public static final int OPTIONS_GRAPH_INTERVAL = 0;
+	public static final int OPTIONS_CLEAR_POPUPS   = 1;
 	
 	private SESFrame frame;
 	
@@ -30,6 +31,8 @@ public class SESMenu extends JMenuBar {
     }
     
     public void resizeFrame() {
+    	super.removeAll();
+    	
     	business();
     	options();
     	
@@ -37,29 +40,26 @@ public class SESMenu extends JMenuBar {
     	super.repaint();
 	}
 	private void options() {
-		if(options != null)
-    		super.remove(options);
-		
     	MenuConstructor optionsMenu = new MenuConstructor("Options", false)
     	.addItem("Intervale du graphe")
     		.addActionListener(new MainOptionsMenuListener(frame, OPTIONS_GRAPH_INTERVAL))
+    	.build()
+    	.addItem("Fermer les popups")
+    		.addActionListener(new MainOptionsMenuListener(frame, OPTIONS_CLEAR_POPUPS))
     	.build();
     	
     	options = optionsMenu.build();
     	super.add(options);
     }
     private void business() {
-    	if(business != null)
-    		super.remove(business);
-    	
     	MenuConstructor businessMenu = new MenuConstructor("Entreprises", false);
     	MenuConstructor changeMenu = new MenuConstructor("Changer", false);
     	
-    	/*changeMenu = */changeMenu.addItem(SESMain.getFrame().getbManager().getBaseBusiness().getName()).addActionListener(new ChangeBusinessMenuListener(frame, SESMain.getFrame().getbManager().getBaseBusiness())).build().addSeparator();
+    	changeMenu.addItem(SESMain.getFrame().getbManager().getBaseBusiness().getName()).addActionListener(new ChangeBusinessMenuListener(frame, SESMain.getFrame().getbManager().getBaseBusiness())).build().addSeparator();
     	for(Business b : SESMain.getFrame().getbManager().getBusinesses())
-    		/*changeMenu = */changeMenu.addItem(b.getName()).addActionListener(new ChangeBusinessMenuListener(frame, b)).build();
+    		changeMenu.addItem(b.getName()).addActionListener(new ChangeBusinessMenuListener(frame, b)).setIcon(b.getIcon()).build();
     	
-    	/*mainMenu = */businessMenu.add(changeMenu.build())
+    	businessMenu.add(changeMenu.build())
 		.addItem("Créer")
 			.addActionListener(new MainBusinessMenuListener(frame, BUSINESS_CREATE))
 		.build()
