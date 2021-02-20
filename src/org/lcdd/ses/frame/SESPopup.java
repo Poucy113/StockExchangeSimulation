@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -34,7 +35,7 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 	private boolean stopOnClose = false;
 	
 	private Object answer = null;
-	private PopupActionConsumer<Object> onComplete;
+	private PopupCompleteActionConsumer<Object> onComplete;
 	
 	public SESPopup(SESFrame supe, String title, String msg, PopupType type) {
 		super(title);
@@ -45,15 +46,16 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 		
 		supe.getActivePopups().add(this);
 		
-		//supe.setEnabled(false);
 		super.setType(Type.POPUP);
-		super.setBounds(supe.getX(), supe.getY(), 325, 200);
+		super.setSize(325, 200);
+		super.setLocation(supe.getWidth()/2 -super.getWidth()/2, supe.getHeight()/2 -super.getHeight()/2);
+		
 		super.setEnabled(true);
 		super.setAlwaysOnTop(true);
 		super.setResizable(false);
 		
 		JDesktopPane desk = new JDesktopPane();
-		desk.setBounds(0, 0, 325, 200);
+		desk.setBounds(supe.getWidth()/2 -super.getWidth()/2, supe.getHeight()/2 -super.getHeight()/2, 325, 200);
 		super.setContentPane(desk);
 		super.getContentPane().setBackground(Color.GRAY);
 		super.setBounds(super.getContentPane().getBounds());
@@ -67,10 +69,11 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 	
 	private void setup() {
 		label = new JLabel(msg);
+		label.setForeground(Color.WHITE);
 		if(type == PopupType.BOOLEAN)
 			label.setBounds(0, (super.getContentPane().getHeight() / 2)*0, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 2));
 		else
-			label.setBounds(0, (super.getContentPane().getHeight() / 3)*0, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
+			label.setBounds(0, (super.getContentPane().getHeight() / 3)*0, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3) +15);
 		label.setVisible(true);
 		super.getContentPane().add(label);
 		
@@ -78,8 +81,10 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 			input = new JTextField();
 		else if(type == PopupType.INPUT_NUMBER)
 			input = new JSpinner();
+		else if(type == PopupType.CHOICE)
+			input = new JComboBox<Object>();
 		if(type != PopupType.BOOLEAN && type != PopupType.ALERT) {
-			input.setBounds(0, (super.getContentPane().getHeight() / 3)*1, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
+			input.setBounds(0, (super.getContentPane().getHeight() / 3)*1 +15, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3) -15);
 			input.setVisible(true);
 			super.getContentPane().add(input);
 		}
@@ -106,7 +111,22 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 		}
 	}
 	
-	public SESPopup onComplete(PopupActionConsumer<Object> r) {this.onComplete = r;return this;}
+	public SESPopup setBase(Object obj) {
+		if(type == PopupType.INPUT_NUMBER)
+			((JSpinner) input).setValue((int) obj);
+		if(type == PopupType.INPUT_STRING)
+			((JLabel) input).setText((String) obj);
+		return this;
+	}
+	@SuppressWarnings("unchecked")
+	public <T> SESPopup setItems(List<T> objects, PopupComboBoxTranslateConsumer<T> cons) {
+		if(type != PopupType.CHOICE)
+			return this;
+		for(T t : objects)
+			((JComboBox<Object>) input).addItem(cons.<Object>accept(t));
+		return this;
+	}
+	public SESPopup onComplete(PopupCompleteActionConsumer<Object> r) {this.onComplete = r;return this;}
 	private boolean complete() {
 		if(onComplete == null)
 			return true;
@@ -123,7 +143,7 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 	public JLabel getLabel() {return label;}
 	public JComponent getInput() {return input;}
 	public List<JButton> getButtons() {return buttons;}
-	public PopupActionConsumer<Object> getOnComplete() {return onComplete;}
+	public PopupCompleteActionConsumer<Object> getOnComplete() {return onComplete;}
 	public boolean isCancelled() {return cancelled;}
 	public boolean isStopOnClose() {return stopOnClose;}
 	public SESPopup setStopOnClose(boolean stopOnClose) {this.stopOnClose = stopOnClose;return this;}
@@ -183,12 +203,17 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 		INPUT_STRING(),
 		INPUT_NUMBER(),
 		BOOLEAN(),
-		ALERT();
+		ALERT(),
+		CHOICE();
 	}
 	
 	@FunctionalInterface
-	public interface PopupActionConsumer<T> {
+	public interface PopupCompleteActionConsumer<T> {
 		boolean accept(Object answer);
+	}
+	@FunctionalInterface
+	public interface PopupComboBoxTranslateConsumer<T> {
+		<R> R accept(T answer);
 	}
 
 }

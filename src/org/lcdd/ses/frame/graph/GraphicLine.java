@@ -1,23 +1,17 @@
 package org.lcdd.ses.frame.graph;
 
-import java.awt.Color;
+import java.awt.geom.Line2D;
 
-import org.lcdd.ses.SESMain;
-
-public class GraphicLine {
-	
-	private int before = 0;
+public class GraphicLine extends Line2D.Float {
+	private static final long serialVersionUID = 1L;
 	
 	private GraphicNode n1, n2;
 	private GraphicLineType type;
 	
 	public GraphicLine(GraphicNode n1, GraphicNode n2) {
+		super(0, n1.getY(), 0, n2.getY());
 		this.n1 = n1;
 		this.n2 = n2;
-	}
-	
-	public void draw() {
-		SESMain.getFrame().getGraph().addLine(this);
 	}
 	
 	public GraphicLineType getType() {return type;}
@@ -26,30 +20,10 @@ public class GraphicLine {
 	public void setN1(GraphicNode n1) {this.n1 = n1;}
 	public GraphicNode getN2() {return n2;}
 	public void setN2(GraphicNode n2) {this.n2 = n2;}
-	public int getBefore() {return before;}
-	public void setBefore(int before) {this.before = before;}
 	
 	@Override
 	public String toString() {
 		return type+":"+n1+":"+n2+":"+hashCode();
 	}
 	
-	public enum GraphicLineType {
-		POSITIV(Color.GREEN),
-		NEUTRAL(Color.GRAY),
-		NEGATIV(Color.RED);
-		private Color color;
-		private GraphicLineType(Color color) {this.color = color;}
-		public Color getColor() {return color;}
-		public static GraphicLineType getFor(double d) {
-			if(Double.valueOf(d) < 0)
-				return NEGATIV;
-			if(Double.valueOf(d) == 0)
-				return NEUTRAL;
-			if(Double.valueOf(d) > 0)
-				return POSITIV;
-			return NEUTRAL;
-		}
-	}
-
 }
