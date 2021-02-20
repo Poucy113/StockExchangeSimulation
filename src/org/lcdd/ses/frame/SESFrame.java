@@ -257,6 +257,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	public UserManager getManager() {return manager;}
 	public String getUsername() {return username;}
 	public JPanel getUserPanel() {return userPanel;}
+	public void setUpdater(GraphUpdater updater) {this.updater = updater;}
 	public void setGraph(SESGraph graph) {
 		if(this.graph != null)
 			super.getContentPane().remove(this.graph);
