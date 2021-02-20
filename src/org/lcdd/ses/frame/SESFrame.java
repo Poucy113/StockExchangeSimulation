@@ -200,7 +200,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		}
 	}
 	public void updateButtons() {
-		buyButton.setText("Acheter"+(updater != null ? ": "+updater.getPrice() : ""));
+		buyButton.setText("Acheter"+(updater != null ? ": "+(updater.getPrice()/100) : ""));
 		
 		if(graph != null) {
 			buyButton.setBounds(graph.getX()+(graph.getWidth()/2*0), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());

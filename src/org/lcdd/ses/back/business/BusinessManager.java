@@ -42,9 +42,9 @@ public class BusinessManager {
     public void base() {
     	baseBusiness = new Business("Le coin des developpeurs", -5, 5, 1250);
     	if(isNew()) {
-    		businesses.add(new Business("Le jardin des lapins", -8, 4, 850));
+    		businesses.add(new Business("Le jardin des lapins", -4, 4, 850));
     		businesses.add(new Business("Axelapin", -2, 7, 650));
-    		businesses.add(new Business("Fondactul", -5, 3, 1120));
+    		businesses.add(new Business("Fondactul", -3, 3, 1120));
     	}
     }
 

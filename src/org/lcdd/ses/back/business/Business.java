@@ -14,8 +14,8 @@ public class Business {
 	
 	private String name;
 	private ImageIcon icon = BASE_ICON;
-	private int max = 0;
-	private int min = 0;
+	private double max = 0;
+	private double min = 0;
 	
 	private int maxUpdateTime = 1250;
 	
@@ -33,16 +33,10 @@ public class Business {
 		getIcon();
 	}
 	
-	private boolean contains(String[] list, String replaceAll) {
-		for(String s : list)
-			if(s.equals(replaceAll))
-				return true;
-		return false;
-	}
-
 	public Business start(SESFrame frame) {
 		graphUpdater = new GraphUpdater(this);
-		graph = new SESGraph(frame, this);
+		if(frame != null)
+			graph = new SESGraph(frame, this);
 		started = true;
 		return this;
 	}
@@ -52,13 +46,20 @@ public class Business {
 		frame.resizeFrame();
 	}
 	
+	private boolean contains(String[] list, String replaceAll) {
+		for(String s : list)
+			if(s.equals(replaceAll))
+				return true;
+		return false;
+	}
+	
 	public boolean isStarted() {return started;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
-	public int getMax() {return max;}
-	public void setMax(int max) {this.max = max;}
-	public int getMin() {return min;}
-	public void setMin(int min) {this.min = min;}
+	public double getMax() {return max;}
+	public void setMax(double max) {this.max = max;}
+	public double getMin() {return min;}
+	public void setMin(double min) {this.min = min;}
 	public SESGraph getGraph() {return graph;}
 	public void setGraph(SESGraph graph) {this.graph = graph;}
 	public GraphUpdater getGraphUpdater() {return graphUpdater;}

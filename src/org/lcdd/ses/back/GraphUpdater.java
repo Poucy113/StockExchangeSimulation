@@ -20,8 +20,6 @@ public class GraphUpdater {
     public GraphUpdater(Business en) {
     	this.business = en;
 		th = new Thread(new Runnable() {
-			private Random r = new Random();
-			private double d;
 	        @Override
 	        public void run() {
                 while (true) {
@@ -33,11 +31,12 @@ public class GraphUpdater {
                     	if(business.getGraph() != null)
                     		business.getGraph().addLine(new GraphicLine(new GraphicNode((int) oldPrice), new GraphicNode((int) newPrice))).update();
                     	
-                    	if(SESMain.getFrame().getGraph() != null)
-                    		if(SESMain.getFrame().getGraph().getBusiness().equals(business)) {
-                        		SESMain.getFrame().updateBusinessPanel();
-                        		SESMain.getFrame().updateButtons();
-                    		}
+                    	if(SESMain.getFrame() != null)
+                    		if(SESMain.getFrame().getGraph() != null)
+                        		if(SESMain.getFrame().getGraph().getBusiness().equals(business)) {
+                            		SESMain.getFrame().updateBusinessPanel();
+                            		SESMain.getFrame().updateButtons();
+                        		}
                     	
                         Thread.sleep(r.nextInt(en.getMaxUpdateTime()));
                     } catch (InterruptedException e) {
@@ -45,22 +44,26 @@ public class GraphUpdater {
                     }
                 }
             }
-	        private double rand() {
-	        	d = price+(r.nextInt(en.getMin()*(-1)+en.getMax() +1) -(en.getMin()*(-1)/* - Math.min(en.getMin()*(-1), en.getMax())*/));
-	        	if(d < -200) {
-	        		d += r.nextInt(35);
-	        		rand();
-        		}else if(d > 200) {
-        			d -= r.nextInt(35);
-        			rand();
-        		}
-				return d;
-	        }
 	    });
 		th.setName("GraphUpdater-["+en.getName()+"]");
 		th.start();
 	}
+    
+    private Random r = new Random();
+    private double d;
+    public double rand() {
+    	d = price+((business.getMin()*(-1)+business.getMax() +1)) *r.nextDouble() -(business.getMin()*(-1));
+    	if(d < -200) {
+    		d += r.nextInt(35);
+    		rand();
+		}else if(d > 200) {
+			d -= r.nextInt(35);
+			rand();
+		}
+		return d;
+    }
 
+    public void setPrice(double price) {this.price = price;}
     public double getPrice() {return UserManager.round(price, 2);}
     public Thread getUpdaterThread() {return th;}
     public Business getBusiness() {return business;}
