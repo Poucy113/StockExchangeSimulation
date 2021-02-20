@@ -17,7 +17,7 @@ public class SESMenu extends JMenuBar {
 	public static final int BUSINESS_CREATE        =  0;
 	
 	public static final int OPTIONS_GRAPH_INTERVAL = 0;
-	public static final int OPTIONS_CLEAR_POPUPS   = 0;
+	public static final int OPTIONS_CLEAR_POPUPS   = 1;
 	
 	private SESFrame frame;
 	

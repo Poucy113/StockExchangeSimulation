@@ -31,8 +31,7 @@ public class Business {
 		this.maxUpdateTime = _m3;
 		
 		if(contains(new File("./src/assets/").list(), (name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"))) 
-			icon = new ImageIcon("src/assets/"+(name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"));
-		System.out.println(icon);
+			icon = new ImageIcon("./src/assets/"+(name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"));
 	}
 	
 	private boolean contains(String[] list, String replaceAll) {
