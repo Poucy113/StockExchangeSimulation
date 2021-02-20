@@ -1,5 +1,7 @@
 package org.lcdd.ses.back.business;
 
+import java.io.File;
+
 import javax.swing.ImageIcon;
 
 import org.lcdd.ses.back.GraphUpdater;
@@ -27,8 +29,19 @@ public class Business {
 		this.min = _m1;
 		this.max = _m2;
 		this.maxUpdateTime = _m3;
+		
+		if(contains(new File("./src/assets/").list(), (name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"))) 
+			icon = new ImageIcon("src/assets/"+(name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"));
+		System.out.println(icon);
 	}
 	
+	private boolean contains(String[] list, String replaceAll) {
+		for(String s : list)
+			if(s.equals(replaceAll))
+				return true;
+		return false;
+	}
+
 	public Business start(SESFrame frame) {
 		graphUpdater = new GraphUpdater(this);
 		graph = new SESGraph(frame, this);
