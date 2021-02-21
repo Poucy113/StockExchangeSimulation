@@ -96,10 +96,12 @@ public class UserManager {
     }
     
     public void buy(){
-    	double percent = (100/(SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice()*8));
-		double amount = round(SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice() /100, 2);
-		money = round(money - ((amount+percent) /100), 2);
-        new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez acheté une action pour "+round((amount+percent) /100, 2)+"€", PopupType.ALERT);
+    	double price = SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice();
+    	//double percent = (100/price)*8;
+		double amount = round(price, 2);
+		double total = UserManager.round(((price+(100/price)*8)) /100, 2);
+		money = money - total;
+        new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez acheté une action pour "+total+"€", PopupType.ALERT);
         actions.add(new Action(amount, SESMain.getFrame().getGraph().getBusiness()));
         SESMain.getFrame().resizeFrame();
     }
