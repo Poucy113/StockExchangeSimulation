@@ -55,7 +55,7 @@ public class SESMenu extends JMenuBar {
     	MenuConstructor businessMenu = new MenuConstructor("Entreprises", false);
     	MenuConstructor changeMenu = new MenuConstructor("Changer", false);
     	
-    	changeMenu.addItem(SESMain.getFrame().getbManager().getBaseBusiness().getName()).addActionListener(new ChangeBusinessMenuListener(frame, SESMain.getFrame().getbManager().getBaseBusiness())).build().addSeparator();
+    	changeMenu.addItem(SESMain.getFrame().getbManager().getBaseBusiness().getName()).addActionListener(new ChangeBusinessMenuListener(frame, SESMain.getFrame().getbManager().getBaseBusiness())).setIcon(SESMain.getFrame().getbManager().getBaseBusiness().getIcon()).build().addSeparator();
     	for(Business b : SESMain.getFrame().getbManager().getBusinesses())
     		changeMenu.addItem(b.getName()).addActionListener(new ChangeBusinessMenuListener(frame, b)).setIcon(b.getIcon()).build();
     	

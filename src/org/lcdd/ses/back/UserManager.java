@@ -96,16 +96,18 @@ public class UserManager {
     }
     
     public void buy(){
-		double amount = round(SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice()+(100/SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice())*8, 2);
-		money = round(money - amount, 2);
-        new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez acheté une action pour " + amount, PopupType.ALERT);
+    	double percent = (100/(SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice()*8));
+		double amount = round(SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice() /100, 2);
+		money = round(money - ((amount+percent) /100), 2);
+        new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez acheté une action pour "+round((amount+percent) /100, 2)+"€", PopupType.ALERT);
         actions.add(new Action(amount, SESMain.getFrame().getGraph().getBusiness()));
         SESMain.getFrame().resizeFrame();
     }
     public void sell(){
         if(this.actions.size() >= 1){
-            money = money + SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice();
-            new SESPopup(SESMain.getFrame(), "SES - Info", "Vous avez vendu une action pour " + SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice(), PopupType.ALERT);
+            money = money+(SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice() /100);
+            double c = (actions.get(0).getAmount()-(SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice() /100));
+            new SESPopup(SESMain.getFrame(), "SES - Info", "<html>Vous avez vendu une action pour "+(SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice() /100)+"€<br>"+(c <= 0 ? "+"+c : c)+"€</html>", PopupType.ALERT);
             actions.remove(0);
             SESMain.getFrame().resizeFrame();
         }else{

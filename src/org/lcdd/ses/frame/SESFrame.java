@@ -166,7 +166,6 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 			userPanelActionsList.setText("<html>Vos actions:<br>"+getActionsText()+"</html>");
 		
 		if(bManager != null) {
-			//int h = userPanelUserName.getHeight()+userPanelMoneyCount.getHeight()+userPanelActionsList.getHeight();
 			userPanelBusinessInfo.setBounds(
 					10,
 					(int) ((int) userPanel.getHeight() -(userPanel.getHeight()/2.5)),
@@ -190,7 +189,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 			JLabel txt = new JLabel(
 				"<html>"+
 					this.graph.getBusiness().getName()+"<br>"+
-					(this.graph.getBusiness().getMin()*(-1))+" - "+(this.updater.getPrice()/100)+" + "+this.graph.getBusiness().getMax()+"<br>"+
+					(this.graph.getBusiness().getMin()*(-1))+" < "+(UserManager.round(this.updater.getPrice()/100, 2))+"€ < "+this.graph.getBusiness().getMax()+"<br>"+
 					this.graph.getBusiness().getMaxUpdateTime()+
 				"</html>"
 			);
@@ -200,7 +199,11 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		}
 	}
 	public void updateButtons() {
-		buyButton.setText("Acheter"+(updater != null ? ": "+(updater.getPrice()/100) : ""));
+		buyButton.setText("Acheter"+
+				(updater != null ?
+				": "+UserManager.round(((updater.getPrice()+(100/updater.getPrice())*8)) /100, 2)+"€"
+				: "")
+		);
 		
 		if(graph != null) {
 			buyButton.setBounds(graph.getX()+(graph.getWidth()/2*0), graph.getHeight(), graph.getWidth()/2, super.getContentPane().getHeight()-graph.getHeight());
