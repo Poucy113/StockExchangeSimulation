@@ -1,6 +1,7 @@
 package org.lcdd.ses.back.business;
 
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 
@@ -13,7 +14,7 @@ public class Business {
 	private static final ImageIcon BASE_ICON = new ImageIcon("src/assets/base-business-icon.png");
 	
 	private String name;
-	private ImageIcon icon = BASE_ICON;
+	private ImageIcon icon;
 	private double max = 0;
 	private double min = 0;
 	
@@ -46,11 +47,15 @@ public class Business {
 		frame.resizeFrame();
 	}
 	
-	private boolean contains(String[] list, String replaceAll) {
-		for(String s : list)
-			if(s.equals(replaceAll))
-				return true;
-		return false;
+	private String contains(File file, String replaceAll) {
+		for(String s : file.list()) {
+			String name2 = replaceAll.toLowerCase().replaceAll(" ", "-")+"-business-icon";
+			for(String r : Arrays.asList(".png", ".gif", ".jpg")) {
+				if(s.equals(name2+r))
+					return name2+r;
+			}
+		}
+		return null;
 	}
 	
 	public boolean isStarted() {return started;}
@@ -67,10 +72,17 @@ public class Business {
 	public int getMaxUpdateTime() {return maxUpdateTime;}
 	public void setMaxUpdateTime(int maxUpdateTime) {this.maxUpdateTime = maxUpdateTime;}
 	public ImageIcon getIcon() {
-		if(contains(new File("./src/assets/").list(), (name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"))) 
-			icon = new ImageIcon("./src/assets/"+(name.toLowerCase().replaceAll(" ", "-")+"-business-icon.png"));
+		if(contains(new File("./src/assets/"), name) != null)
+			icon = new ImageIcon("./src/assets/"+contains(new File("./src/assets/"), name));
+		else
+			icon = BASE_ICON;
 		return icon;
 	}
 	public void setIcon(ImageIcon icon) {this.icon = icon;}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getName()+":"+getName();
+	}
 	
 }

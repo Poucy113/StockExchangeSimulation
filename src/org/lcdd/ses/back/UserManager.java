@@ -97,7 +97,6 @@ public class UserManager {
     
     public void buy(){
     	double price = SESMain.getFrame().getGraph().getBusiness().getGraphUpdater().getPrice();
-    	//double percent = (100/price)*8;
 		double amount = round(price, 2);
 		double total = UserManager.round(((price+(100/price)*8)) /100, 2);
 		money = money - total;

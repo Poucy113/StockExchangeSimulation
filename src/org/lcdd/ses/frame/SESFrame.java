@@ -1,6 +1,9 @@
 package org.lcdd.ses.frame;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -45,6 +48,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	private JLabel userPanelMoneyCount = new JLabel();
 	private JLabel userPanelActionsList = new JLabel("Vos actions:");
 	private JPanel userPanelBusinessInfo = new JPanel();
+	private JLabel icon = new JLabel();
 	
 	private JButton buyButton = new JButton();
 	private JButton sellButton = new JButton();
@@ -138,6 +142,10 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		userPanelActionsList.setVisible(true);
 		userPanelActionsList.setForeground(Color.WHITE);
 		userPanel.add(userPanelActionsList);
+		if(this.graph != null)
+			icon = new JLabel(this.graph.getBusiness().getIcon());
+		icon.setVisible(true);
+		userPanelBusinessInfo.add(icon);
 		userPanelBusinessInfo.setBackground(Color.LIGHT_GRAY);
 		userPanelBusinessInfo.setVisible(true);
 		userPanel.add(userPanelBusinessInfo);
@@ -183,9 +191,12 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	public void updateBusinessPanel() {
 		userPanelBusinessInfo.removeAll();
 		userPanelBusinessInfo.setBorder(new TitledBorder("Entreprise"));
-		if(graph != null && updater != null) {
-			JLabel icon = new JLabel(this.graph.getBusiness().getIcon());
+		if(this.graph != null) {
+			icon = new JLabel(this.graph.getBusiness().getIcon());
 			icon.setVisible(true);
+			userPanelBusinessInfo.add(icon);
+		}
+		if(graph != null && updater != null) {
 			JLabel txt = new JLabel(
 				"<html>"+
 					this.graph.getBusiness().getName()+"<br>"+
@@ -194,7 +205,6 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 				"</html>"
 			);
 			txt.setVisible(true);
-			userPanelBusinessInfo.add(icon);
 			userPanelBusinessInfo.add(txt);
 		}
 	}
