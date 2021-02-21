@@ -1,6 +1,6 @@
 package org.lcdd.ses.frame;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -77,10 +77,14 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 		label.setVisible(true);
 		super.getContentPane().add(label);
 		
-		if(type == PopupType.INPUT_STRING)
+		if(type == PopupType.INPUT_STRING) {
 			input = new JTextField();
-		else if(type == PopupType.INPUT_NUMBER)
+			input.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		}
+		else if(type == PopupType.INPUT_NUMBER) {
 			input = new JSpinner();
+			input.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		}
 		else if(type == PopupType.CHOICE)
 			input = new JComboBox<Object>();
 		if(type != PopupType.BOOLEAN && type != PopupType.ALERT) {
@@ -93,15 +97,19 @@ public class SESPopup extends JFrame implements MouseListener, WindowListener {
 			JButton button1 = new JButton("Oui"), button2 = new JButton("Non");
 			button1.setBounds((super.getContentPane().getWidth() / 2)*0, (super.getContentPane().getHeight() / 2)*1, (super.getContentPane().getWidth() / 2)*1, (super.getContentPane().getHeight() / 2));
 			button2.setBounds((super.getContentPane().getWidth() / 2)*1, (super.getContentPane().getHeight() / 2)*1, (super.getContentPane().getWidth() / 2)*1, (super.getContentPane().getHeight() / 2));
+			button1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			button2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			buttons.add(button1);
 			buttons.add(button2);
 		}else if(type == PopupType.ALERT) {
 			JButton button1 = new JButton("Ok");
 			button1.setBounds(0, (super.getContentPane().getHeight() / 2)*1, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
+			button1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			buttons.add(button1);
 		}else {
 			JButton button1 = new JButton("Valider");
 			button1.setBounds(0, (super.getContentPane().getHeight() / 3)*2, super.getContentPane().getWidth(), (super.getContentPane().getHeight() / 3));
+			button1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			buttons.add(button1);
 		}
 		for(JButton b : buttons) {
