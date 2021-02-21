@@ -1,8 +1,6 @@
 package org.lcdd.ses.frame;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -88,6 +86,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 	private void buttons(JDesktopPane desk) {
 		buyButton.setText("Acheter"+(updater != null ? ": "+updater.getPrice() : ""));
 		buyButton.setVisible(true);
+		buyButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		buyButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -109,6 +108,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		else
 			sellButton.setText("Vendre");
 		sellButton.setVisible(true);
+		sellButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		sellButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
