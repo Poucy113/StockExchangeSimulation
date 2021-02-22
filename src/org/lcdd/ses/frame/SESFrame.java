@@ -149,6 +149,9 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		userPanelBusinessInfo.setBackground(Color.LIGHT_GRAY);
 		userPanelBusinessInfo.setVisible(true);
 		userPanel.add(userPanelBusinessInfo);
+
+		JLabel credits = new JLabel("© 2021 Poucy113 & Freezmzan31");
+		userPanel.add(credits);
 		desk.add(userPanel);
 	}
 
