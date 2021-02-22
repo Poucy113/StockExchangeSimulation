@@ -1,8 +1,9 @@
 # StockExchangeSimulation
 
 ### Interface
-Au lancement du jeu, un nom d'utilisateur vous sera demandé. ATTENTION ! C'est avec ce nom d'utilisateur que vous pourrez récuperer votre sauvegarde, ne le perdez pas !
+Au lancement du jeu, un nom d'utilisateur vous sera demandé. **ATTENTION !** C'est avec ce nom d'utilisateur que vous pourrez récuperer votre sauvegarde, ne le perdez pas !
 ![LoginPanel](/media/login.png)
+------------
 L'interface de jeu est principalement constituée par un graphe :
 ![MainPanel](/media/mainpanel.png)
 Et de deux boutons, le bouton d'achat et de vente
