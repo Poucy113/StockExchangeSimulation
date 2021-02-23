@@ -4,38 +4,37 @@
 
 ### Interface
 
-Au lancement du jeu, un nom d'utilisateur vous sera demandÃ©. **ATTENTION !** C'est avec ce nom d'utilisateur que vous pourrez rÃ©cuperer votre sauvegarde, ne le perdez pas !
+Au lancement du jeu, un nom d'utilisateur vous sera demand&eacute;. **ATTENTION !** C'est avec ce nom d'utilisateur que vous pourrez r&eacute;cuperer votre sauvegarde, ne le perdez pas !
 
 ![LoginPanel](./media/login.png)
 --------------------------------------
-L'interface de jeu est principalement constituÃ©e par un graphe :
+L'interface de jeu est principalement constitu&eacute; d'un graphe, et de deux boutons, le bouton d'achat et de vente:
 
 ![MainPanel](./media/mainpanel.png)
 
-Et de deux boutons, le bouton d'achat et de vente
 ### But du jeu
-Le principe est d'avoir le plus d'argent possible en achentant et en vendant des actions (comme un trader !).
+Le principe est d'avoir le plus d'argent possible en achentant et en vendant des actions *(comme un trader !)*.
 Vous devrez pour cela acheter le moins cher possible et de vendre pour un maximum de LapiCoins  !
 
 ### Les entreprises / Business
 
 Une grande partie du gameplay de ce jeu: **Les entreprises** !
-Les Entreprises sont indépendantes et possèdent chacune leurs propres courbes et leurs propres taux.
+Les Entreprises sont ind&eacute;pendantes et possèdent chacune leurs propres courbes et leurs propres taux.
 Les actions ne sont **pas interchangeables** entre les entreprises. Par exemple, si vous possedez une action chez Fondactul, vous ne pouvez *pas* la vendre chez Axelapi !
-Vous pouvez également modifier les entreprises:
+Vous pouvez &eacute;galement modifier les entreprises:
 1. Elles se trouvent dans le fichier `./saves/businesses.json`
 2. Un JSONArray contenu dans le fichier les stoquent
-3. Je *(Nous ?)* deconseillons de modifier ce fichier, vous pouvez [ajouter des entreprises](#ajouter-une-entreprise), mais je déconseille de modifier celles qui y sont déja actuellement
+3. Je *(Nous ?)* deconseillons de modifier ce fichier, vous pouvez [ajouter des entreprises](#ajouter-une-entreprise), mais je d&eacute;conseille de modifier celles qui y sont d&eacute;ja actuellement
 
 #### Ajouter une entreprise
 
 Chaque entreprise comporte ces elements:
 - Un **minimum**, le maximum de chute
-- Un **maximum**, le maximum de remonté
+- Un **maximum**, le maximum d'augmentation
 - Un **nom**, le nom de l'entreprise *(Non, vraiment ?)*
 - Le **maximum de mises à jour**, l'entreprise sera mise à jour à chaque interval de cette valeur (en ms)
 
-Chaque entreprise se présente sous cette forme:
+Chaque entreprise se pr&eacute;sente sous cette forme:
 
 ```
 {
@@ -47,8 +46,8 @@ Chaque entreprise se présente sous cette forme:
 ```
 
 Les icones:
-Chaque entreprise a une icone, elle est sauvegardé dans le dossier [./src/assets/](./src/assets/), sous cette forme:
-- `<nom-en-minuscule-espaces-remplacés-par-des-tirets>-business-icon.png`
+Chaque entreprise a une icone, elle est sauvegard&eacute; dans le dossier [./src/assets/](./src/assets/), sous cette forme:
+- `<nom-en-minuscule-espaces-remplac&eacute;s-par-des-tirets>-business-icon.png`
 
 Plusieurs extentions sont disponnibles: **JPEG** (`.jpg`), **PNG** (`.png`), **GIF** (`.gif`) 
 *(!!ATTENTION!! Les gifs ne sont pas fonctionnels avec Swing)*
@@ -61,12 +60,18 @@ Plusieurs extentions sont disponnibles: **JPEG** (`.jpg`), **PNG** (`.png`), **G
 
 ![Enterprise](./media/enterprise1.png)
 
-Ce menu vous permet de changer d'entreprises et d'en crÃ©er / d'en supprimer.
-Lors de la crÃ©ation d'une entreprise, il vous sera demandÃ© un nom, une chute maximum (la valeur maximum de la descente de la courbe) et une augmentation maximum (la valeur maximum de la montÃ©e de la courbe).
+Ce menu vous permet de changer d'entreprises et d'en cr&eacute;er / d'en supprimer.
+Lors de la cr&eacute;ation d'une entreprise, il vous sera demand&eacute;:
+1. Un nom
+2. La chute maximale
+3. L'augmentations maximale
+4. Un interval de mise à jour
+
+*Voir: [Cr&eacute;ation d'une entreprise](#ajouter-une-entreprise)*
 
 #### Les options
 
 ![Options](./media/options.png)
 
-Ce menu-ci vous permet d'adapter les paramÃ¨tres Ã  votre guise !
-Vous pouvez personnaliser l'intervale (l'espacement entre chaque trait de la courbe), ou bien fermer tout les pop-ups
+Ce menu-ci vous permet d'adapter les paramètres à  votre guise !
+Vous pouvez personnaliser l'intervale (l'espacement entre chaque trait de la courbe), ou bien fermer tout les popups actives (alertes uniquement!)
