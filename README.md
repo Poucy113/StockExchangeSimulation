@@ -19,7 +19,7 @@ Vous devrez pour cela acheter le moins cher possible et de vendre pour un maximu
 ### Les entreprises / Business
 
 Une grande partie du gameplay de ce jeu: **Les entreprises** !
-Les Entreprises sont ind&eacute;pendantes et possèdent chacune leurs propres courbes et leurs propres taux.
+Les Entreprises sont ind&eacute;pendantes et poss&egrave;dent chacune leurs propres courbes et leurs propres taux.
 Les actions ne sont **pas interchangeables** entre les entreprises. Par exemple, si vous possedez une action chez Fondactul, vous ne pouvez *pas* la vendre chez Axelapi !
 Vous pouvez &eacute;galement modifier les entreprises:
 1. Elles se trouvent dans le fichier `./saves/businesses.json`
@@ -32,7 +32,7 @@ Chaque entreprise comporte ces elements:
 - Un **minimum**, le maximum de chute
 - Un **maximum**, le maximum d'augmentation
 - Un **nom**, le nom de l'entreprise *(Non, vraiment ?)*
-- Le **maximum de mises à jour**, l'entreprise sera mise à jour à chaque interval de cette valeur (en ms)
+- Le **maximum de mises &agrave; jour**, l'entreprise sera mise &agrave; jour &agrave; chaque interval de cette valeur (en ms)
 
 Chaque entreprise se pr&eacute;sente sous cette forme:
 
@@ -65,7 +65,7 @@ Lors de la cr&eacute;ation d'une entreprise, il vous sera demand&eacute;:
 1. Un nom
 2. La chute maximale
 3. L'augmentations maximale
-4. Un interval de mise à jour
+4. Un interval de mise &agrave; jour
 
 *Voir: [Cr&eacute;ation d'une entreprise](#ajouter-une-entreprise)*
 
@@ -73,5 +73,5 @@ Lors de la cr&eacute;ation d'une entreprise, il vous sera demand&eacute;:
 
 ![Options](./media/options.png)
 
-Ce menu-ci vous permet d'adapter les paramètres à  votre guise !
+Ce menu-ci vous permet d'adapter les param&egrave;tres &agrave;  votre guise !
 Vous pouvez personnaliser l'intervale (l'espacement entre chaque trait de la courbe), ou bien fermer tout les popups actives (alertes uniquement!)
