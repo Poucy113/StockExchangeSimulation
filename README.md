@@ -1,4 +1,5 @@
-# StockExchangeSimulation
+<img align="right" src="./media/icon.png" height="200" width="200" />
+# [Stock Exchange Simulation](https://github.com/Poucy113/StockExchangeSimulation)
 
 ### Interface
 
