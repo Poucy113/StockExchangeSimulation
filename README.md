@@ -4,11 +4,11 @@
 
 Au lancement du jeu, un nom d'utilisateur vous sera demandé. **ATTENTION !** C'est avec ce nom d'utilisateur que vous pourrez récuperer votre sauvegarde, ne le perdez pas !
 
-![LoginPanel](/media/login.png)
+![LoginPanel](./media/login.png)
 --------------------------------------
 L'interface de jeu est principalement constituée par un graphe :
 
-![MainPanel](/media/mainpanel.png)
+![MainPanel](./media/mainpanel.png)
 
 Et de deux boutons, le bouton d'achat et de vente
 ### But du jeu
@@ -28,14 +28,14 @@ Les actions ne sont **pas interchangeables** entre les entreprises. Par exemple,
 
 #### Les boutons d'entreprises
 
-![Enterprise](/media/enterprise1.png)
+![Enterprise](./media/enterprise1.png)
 
 Ce menu vous permet de changer d'entreprises et d'en créer / d'en supprimer.
 Lors de la création d'une entreprise, il vous sera demandé un nom, une chute maximum (la valeur maximum de la descente de la courbe) et une augmentation maximum (la valeur maximum de la montée de la courbe).
 
 #### Les options
 
-![Options](/media/options.png)
+![Options](./media/options.png)
 
 Ce menu-ci vous permet d'adapter les paramètres à votre guise !
 Vous pouvez personnaliser l'intervale (l'espacement entre chaque trait de la courbe), ou bien fermer tout les pop-ups
