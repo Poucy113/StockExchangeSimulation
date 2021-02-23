@@ -1,5 +1,6 @@
 <img align="right" src="./media/icon.png" height="200" width="200" />
-# [Stock Exchange Simulation](https://github.com/Poucy113/StockExchangeSimulation)
+
+# Stock Exchange Simulation
 
 ### Interface
 
@@ -19,17 +20,17 @@ Vous devrez pour cela acheter le moins cher possible et de vendre pour un maximu
 ### Les entreprises / Business
 
 Une grande partie du gameplay de ce jeu : **Les entreprises** !
-Les Entreprises sont indépendantes et possèdent chacune leurs propres courbes et leurs propres taux.
-Les actions ne sont **pas interchangeables** entre les entreprises. Par exemple, si vous possedez une actio chez Fondactul, vous ne pouvez *pas* la vendre chez Axelapi !
+Les Entreprises sont ind�pendantes et poss�dent chacune leurs propres courbes et leurs propres taux.
+Les actions ne sont **pas interchangeables** entre les entreprises. Par exemple, si vous possedez une action chez Fondactul, vous ne pouvez *pas* la vendre chez Axelapi !
 
 
 ### Les menus
 
-*C'est quoi une bonne interface sans bon vieux boutons ??*
+*C'est quoi une bonne interface sans les bon vieux boutons ??*
 
 #### Les boutons d'entreprises
 
-![Enterprise](./media/enterprise1.png)
+![![Enterprise](./media/enterprise1.png)](https://github.com/Poucy113/StockExchangeSimulation)
 
 Ce menu vous permet de changer d'entreprises et d'en créer / d'en supprimer.
 Lors de la création d'une entreprise, il vous sera demandé un nom, une chute maximum (la valeur maximum de la descente de la courbe) et une augmentation maximum (la valeur maximum de la montée de la courbe).
