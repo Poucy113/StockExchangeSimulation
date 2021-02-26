@@ -71,7 +71,7 @@ public class SESFrame extends JFrame implements WindowListener, ComponentListene
 		
 		desk.setVisible(true);
 		super.setContentPane(desk);
-		super.setIconImage(new ImageIcon("src/assets/icon.png").getImage());
+		super.setIconImage(new ImageIcon("assets/icon.png").getImage());
 		super.setSize((int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2));
 		super.setLocation((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2 - getWidth()/2, (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()/2 - getHeight()/2);
 		

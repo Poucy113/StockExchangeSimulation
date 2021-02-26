@@ -11,7 +11,7 @@ import org.lcdd.ses.frame.graph.SESGraph;
 
 public class Business {
 	
-	private static final ImageIcon BASE_ICON = new ImageIcon("src/assets/base-business-icon.png");
+	private static final ImageIcon BASE_ICON = new ImageIcon("assets/base-business-icon.png");
 	
 	private String name;
 	private ImageIcon icon;
@@ -72,8 +72,8 @@ public class Business {
 	public int getMaxUpdateTime() {return maxUpdateTime;}
 	public void setMaxUpdateTime(int maxUpdateTime) {this.maxUpdateTime = maxUpdateTime;}
 	public ImageIcon getIcon() {
-		if(contains(new File("./src/assets/"), name) != null)
-			icon = new ImageIcon("./src/assets/"+contains(new File("./src/assets/"), name));
+		if(contains(new File("./assets/"), name) != null)
+			icon = new ImageIcon("./assets/"+contains(new File("./assets/"), name));
 		else
 			icon = BASE_ICON;
 		return icon;

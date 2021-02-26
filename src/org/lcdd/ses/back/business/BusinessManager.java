@@ -23,7 +23,10 @@ public class BusinessManager {
     private Business baseBusiness;
 
     public BusinessManager(){
-        File file = new File("./saves/businesses.json");
+    	File file = new File("./saves/");
+        if (!file.exists())
+            file.mkdir();
+        file = new File("./saves/businesses.json");
         if(!file.exists()){
             try {
                 file.createNewFile();
